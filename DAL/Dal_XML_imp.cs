@@ -11,6 +11,7 @@ namespace DAL
 {
     class Dal_XML_imp : Idal
     {
+        static int SerialNum = 10000000; //needs to be removed
         static string Address = (Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory()).FullName)).FullName + "\\Resources";
         static XElement ChildrenRoot;
         static XElement MothersRoot;
@@ -44,24 +45,43 @@ namespace DAL
         }
         public void AddChild(Child c)
         {
-            LoadData();
-            foreach (Nanny ch in DataSource.Nannies)
+            foreach (Nanny n in GetNannies())
+                if (n.ID == c.ID)
+                    throw new Exception("ID already exists!");
+            foreach (Child ch in GetChildren())
                 if (ch.ID == c.ID)
                     throw new Exception("ID already exists!");
-            foreach (Child ch in DataSource.Children)
-                if (ch.ID == c.ID)
-                    throw new Exception("ID already exists!");
-            foreach (Mother ch in DataSource.Mothers)
-                if (ch.ID == c.ID)
+            foreach (Mother m in GetMothers())
+                if (m.ID == c.ID)
                     throw new Exception("ID already exists!");
             if (FindMotherByID(c.MotherID) == null)
                 throw new Exception("mother doesn't exist!");
-            DataSource.Children.Add(c);
+            XElement newChild = new XElement("Child",
+                new XElement("ID", c.ID),
+                new XElement("MotherID", c.MotherID),
+                new XElement("FirstName", c.FirstName),
+                new XElement("LastName", c.LastName),
+                new XElement("HaveSpecialNeeds", c.HaveSpecialNeeds),
+                new XElement("BirthDate", new XElement("Year", c.BirthDate.Year), new XElement("Month", c.BirthDate.Month), new XElement("Day", c.BirthDate.Day)),
+                new XElement("SpecialNeeds"));
+            foreach (string need in c.SpecialNeeds)
+                newChild.Element("SpecialNeeds").Add(new XElement("need", need));
+            ChildrenRoot.Add(newChild);
+            ChildrenRoot.Save(Address + "\\Children.xml");
         }
 
         public void AddContract(Contract c)
         {
-            throw new NotImplementedException();
+            Nanny NannyInContract = FindNannyByID(c.NannyID);
+            Child ChildInContract = FindChildByID(c.ChildID);
+            if (NannyInContract == null)
+                throw new Exception("Nanny doesn't exist!");
+            if (ChildInContract == null)
+                throw new Exception("Mother doesn't exist!"); // because a child always has a mother, lack of child is the only way to miss a mother
+            foreach (Contract con in GetContracts())
+                if (con.ChildID == c.ChildID && con.NannyID == c.NannyID)
+                    throw new Exception("Contarct between this nanny and child already exists");
+            c.SerialNumber = (SerialNum++).ToString();
         }
 
         public void AddMother(Mother m)
@@ -76,17 +96,26 @@ namespace DAL
 
         public Child FindChildByID(string id)
         {
-            throw new NotImplementedException();
+            foreach (Child c in GetChildren())
+                if (c.ID == id)
+                    return c;
+            return null;
         }
 
         public Mother FindMotherByID(string id)
         {
-            throw new NotImplementedException();
+            foreach (Mother m in GetMothers())
+                if (m.ID == id)
+                    return m;
+            return null;
         }
 
         public Nanny FindNannyByID(string id)
         {
-            throw new NotImplementedException();
+            foreach (Nanny n in GetNannies())
+                if (n.ID == id)
+                    return n;
+            return null;
         }
 
         public List<Child> GetChildren()
@@ -137,12 +166,98 @@ namespace DAL
 
         public List<Mother> GetMothers()
         {
-            throw new NotImplementedException();
+            LoadData(TypeToLoad.Mother);
+            List<Mother> retList;
+            try
+            {
+                retList = (from mom in MothersRoot.Elements()
+                           select new Mother()
+                           {
+                               Address = mom.Element("Address").Value,
+                               ID = mom.Element("ID").Value,
+                               FirstName = mom.Element("FirstName").Value,
+                               LastName = mom.Element("LastName").Value,
+                               Phone = mom.Element("Phone").Value,
+                               NeedNannyAddress = mom.Element("NeedNannyAddress").Value,
+                               //Comments = (from com in mom.Element("Comments").Elements() select com.Value).ToList()
+                           }).ToList();               
+                foreach (XElement xmom in MothersRoot.Elements())
+                {
+                    Mother mom = retList.Find(m => m.ID == xmom.Element("ID").Value);
+                    foreach (XElement com in xmom.Element("Comments").Elements())
+                        mom.Comments.Add(com.Value);
+                    foreach (XElement day in xmom.Element("DaysNeeded").Elements())
+                    {
+                        int i = 0;
+                        mom.DaysNeeded[i++] = bool.Parse(day.Value);
+                    }
+                    foreach (XElement hour in xmom.Element("HoursNeeded").Elements())
+                    {
+                        int i = 0;
+                        mom.HoursNeeded[0, i] = default(DateTime).AddHours(int.Parse(hour.Element("Begin").Value));
+                        mom.HoursNeeded[1, i++] = default(DateTime).AddHours(int.Parse(hour.Element("End").Value));
+                    }                        
+                       
+                }
+            }
+            catch
+            {
+                retList = null;
+            }
+            return retList;
         }
 
         public List<Nanny> GetNannies()
         {
-            throw new NotImplementedException();
+            LoadData(TypeToLoad.Nanny);
+            List<Nanny> retList;
+            try
+            {
+                retList = (from nan in NanniesRoot.Elements()
+                           select new Nanny()
+                           {
+                               Address = nan.Element("Address").Value,
+                               ID = nan.Element("ID").Value,
+                               FirstName = nan.Element("FirstName").Value,
+                               LastName = nan.Element("LastName").Value,
+                               Phone = nan.Element("Phone").Value,
+                               Elevator = bool.Parse(nan.Element("Elevator").Value),
+                               IsCostByHour = bool.Parse(nan.Element("IsCostByHour").Value),
+                               VacationByMinisterOfEducation = bool.Parse(nan.Element("VacationByMinisterOfEducation").Value),
+                               Expertise = int.Parse(nan.Element("Expertise").Value),
+                               Floor = int.Parse(nan.Element("Floor").Value),
+                               HourSalary = int.Parse(nan.Element("HourSalary").Value),
+                               MonthSalary = int.Parse(nan.Element("MonthSalary").Value),
+                               MaxAge = int.Parse(nan.Element("MaxAge").Value),
+                               MinAge = int.Parse(nan.Element("MinAge").Value),
+                               MaxChildren = int.Parse(nan.Element("MaxChildren").Value),
+                               BirthDate = new DateTime(int.Parse(nan.Element("BirthDate").Element("Year").Value), int.Parse(nan.Element("BirthDate").Element("Month").Value), int.Parse(nan.Element("BirthDate").Element("Day").Value))
+
+                               //Comments = (from com in mom.Element("Comments").Elements() select com.Value).ToList()
+                           }).ToList();
+                foreach (XElement xnan in NanniesRoot.Elements())
+                {
+                    Nanny nan = retList.Find(n => n.ID == xnan.Element("ID").Value);                    
+                    foreach (XElement rec in xnan.Element("Recommendations").Elements())
+                        nan.Recommendations.Add(rec.Value);
+                    foreach (XElement day in xnan.Element("WorkDays").Elements())
+                    {
+                        int i = 0;
+                        nan.WorkDays[i++] = bool.Parse(day.Value);
+                    }
+                    foreach (XElement hour in xnan.Element("WorkHours").Elements())
+                    {
+                        int i = 0;
+                        nan.WorkHours[0, i] = default(DateTime).AddHours(int.Parse(hour.Element("Begin").Value));
+                        nan.WorkHours[1, i++] = default(DateTime).AddHours(int.Parse(hour.Element("End").Value));
+                    }
+                }
+            }
+            catch
+            {
+                retList = null;
+            }
+            return retList;
         }
 
         public void InitSomeVars()
