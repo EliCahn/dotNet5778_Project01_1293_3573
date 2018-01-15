@@ -1,0 +1,63 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UI"
+        xmlns:BE="clr-namespace:BE;assembly=BE" x:Class="UI.MotherWin"
+        mc:Ignorable="d"
+        Title="Add Mother" Height="750" Width="700" Loaded="Window_Loaded">
+    <Window.Resources>
+        <CollectionViewSource x:Key="motherViewSource" d:DesignSource="{d:DesignInstance {x:Type BE:Mother}, CreateList=True}"/>
+    </Window.Resources>
+    <Grid>
+
+        <Grid x:Name="MotherGrid" VerticalAlignment="Stretch" Margin="10" HorizontalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="7*"/>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Label VerticalAlignment="Center" Margin="3" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0" Content="Address:"/>
+            <TextBox x:Name="addressTextBox" Width="120" VerticalAlignment="Center" Text="{Binding Address, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="2" Margin="3" Height="23" HorizontalAlignment="Left" Grid.Column="1"/>
+            <Label VerticalAlignment="Center" Grid.Row="1" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="First Name:"/>
+            <TextBox x:Name="firstNameTextBox" Width="120" VerticalAlignment="Center" Text="{Binding FirstName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="1" Margin="3" Height="23" HorizontalAlignment="Left" Grid.Column="1"/>
+            <Label VerticalAlignment="Center" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="ID:"/>
+            <ComboBox x:Name="iDTextBox" IsEditable="True" Width="120" VerticalAlignment="Center" Text="{Binding ID, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Margin="3" Height="23" HorizontalAlignment="Left" Grid.Column="1" TextBoxBase.TextChanged="IDChanged" MouseEnter="iDTextBox_MouseEnter"/>
+            <Label VerticalAlignment="Center" Grid.Row="3" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="Last Name:"/>
+            <TextBox x:Name="lastNameTextBox" Width="120" VerticalAlignment="Center" Text="{Binding LastName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="3" Margin="3" Height="23" HorizontalAlignment="Left" Grid.Column="1"/>
+            <Label VerticalAlignment="Center" Grid.Row="4" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="Need Nanny Address:"/>
+            <TextBox x:Name="needNannyAddressTextBox" Width="120" VerticalAlignment="Center" Text="{Binding NeedNannyAddress, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="4" Margin="3" Height="23" HorizontalAlignment="Left" Grid.Column="1"/>
+            <Label VerticalAlignment="Center" Grid.Row="5" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="Phone:"/>
+            <TextBox x:Name="phoneTextBox" Width="120" VerticalAlignment="Center" Text="{Binding Phone, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="5" Margin="3" Height="23" HorizontalAlignment="Left" Grid.Column="1"/>
+            <local:WorkHours x:Name="h" Grid.Column="1" HorizontalAlignment="Stretch"  Margin="10" Grid.Row="6" VerticalAlignment="Stretch"/>
+            <Label VerticalAlignment="Center" Grid.Row="6" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="Hours needed:"/>
+            <Label VerticalAlignment="Center" Grid.Row="7" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="Comments"/>
+            <Button Name="CancelBTN" Content="Close" HorizontalAlignment="Center" Grid.Row="8" VerticalAlignment="Center" FontSize="20" Margin="2" Click="CancelBTN_Click"/>
+            
+            <Grid Grid.Column="1" HorizontalAlignment="Stretch"  Grid.Row="18" VerticalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Name="AddBTN" Content="Add" HorizontalAlignment="Stretch" Grid.Column="2" VerticalAlignment="Stretch" FontSize="20" Margin="4" Click="AddBTN_Click"/>
+                <Button Name="UpdateBTN" Content="Update" HorizontalAlignment="Stretch" Grid.Column="1" VerticalAlignment="Stretch" FontSize="20" Margin="4" Click="UpdateBTN_Click" />
+                <Button Name="RemoveBTN" Content="Remove" HorizontalAlignment="Stretch" Grid.Column="0" VerticalAlignment="Stretch" FontSize="20" Margin="4" Click="RemoveBTN_Click" />
+            </Grid>
+            <local:ListStringUI x:Name="coms" Grid.Column="1" HorizontalAlignment="Stretch" Margin="5" Grid.Row="7" VerticalAlignment="Stretch" />
+
+        </Grid>
+
+    </Grid>
+</Window>

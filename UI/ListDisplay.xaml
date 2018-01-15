@@ -1,0 +1,27 @@
+﻿<Window x:Class="UI.ListDisplay"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UI"
+        mc:Ignorable="d"
+        Title="Results" Height="500" Width="500">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.7*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Label Name="DescriptionLBL"  Content="Label" HorizontalAlignment="Stretch" Margin="2" VerticalAlignment="Center" FontSize="15" Grid.ColumnSpan="2"/>
+        <ListBox Name="ResultLST"  Grid.ColumnSpan="3" HorizontalAlignment="Stretch" Margin="5" Grid.Row="1" VerticalAlignment="Stretch" SelectionChanged="ResultLST_SelectionChanged" />
+        <Button Name="OpenSelectionBTN" IsEnabled="False"  Content="Button" HorizontalAlignment="Stretch" Margin="5" Grid.Row="2" VerticalAlignment="Stretch" FontSize="13" Click="OpenSelectionBTN_Click"/>
+        <Button Content="Close" HorizontalAlignment="Stretch" Margin="5" Grid.Row="2" VerticalAlignment="Stretch"  Grid.Column="2" FontSize="20" Click="Button_Click" />
+        <Label Name="CountLBL" Grid.Column="1" HorizontalAlignment="Right" Margin="2" VerticalAlignment="Bottom"/>
+
+    </Grid>
+</Window>

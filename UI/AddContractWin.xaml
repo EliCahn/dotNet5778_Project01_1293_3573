@@ -1,0 +1,60 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UI"
+        xmlns:BE="clr-namespace:BE;assembly=BE" x:Class="UI.ContractWin"
+        mc:Ignorable="d"
+        Title="Add Contract" Height="650" Width="400" Loaded="Window_Loaded">
+    <Window.Resources>
+        <CollectionViewSource x:Key="contractViewSource" d:DesignSource="{d:DesignInstance {x:Type BE:Contract}, CreateList=True}"/>
+    </Window.Resources>
+    <Grid>
+
+        <Grid x:Name="ContGrid" VerticalAlignment="Stretch" Margin="10" HorizontalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                
+                               
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Label VerticalAlignment="Center" Grid.Row="1" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="Beginning:"/>
+            <DatePicker x:Name="beginningDatePicker" VerticalAlignment="Center" SelectedDate="{Binding Beginning, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="1" Margin="3" HorizontalAlignment="Left" Grid.Column="1"/>
+            <DatePicker x:Name="endDatePicker" VerticalAlignment="Center" SelectedDate="{Binding End, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="2" Margin="3" HorizontalAlignment="Left" Grid.Column="1"/>
+            <Label VerticalAlignment="Center" Grid.Row="3" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="Child ID:"/>
+            <ComboBox x:Name="childIDTextBox" Width="120" VerticalAlignment="Center" Grid.Row="3" Margin="3" Height="23" HorizontalAlignment="Left" Grid.Column="1" SelectionChanged="childIDTextBox_SelectionChanged" MouseEnter="childIDTextBox_MouseEnter"/>
+            <Label VerticalAlignment="Center" Grid.Row="2" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="End:"/>
+            <Label VerticalAlignment="Center" Grid.Row="0" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="Serial number:"/>
+            
+            <CheckBox x:Name="isMetCheckBox" Grid.ColumnSpan="2" VerticalAlignment="Center" Grid.Row="5" Margin="3" IsChecked="{Binding IsMet, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" HorizontalAlignment="Left"  Content="Nanny met the child"/>
+           
+            <Label VerticalAlignment="Center" Grid.Row="4" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="Nanny ID:"/>
+            <ComboBox x:Name="nannyIDTextBox" Width="120" VerticalAlignment="Center"  Grid.Row="4" Margin="3" Height="23" HorizontalAlignment="Left" Grid.Column="1" MouseEnter="nannyIDTextBox_MouseEnter"/>
+            <Button Name="CancelBTN" Content="Close" HorizontalAlignment="Center" Grid.Row="7" VerticalAlignment="Center" FontSize="20" Margin="2" Click="CancelBTN_Click"/>
+            
+            <ComboBox Name="SerNumComboBox" Grid.Column="1" HorizontalAlignment="Left"  VerticalAlignment="Center" Width="120" SelectionChanged="SerNumComboBox_SelectionChanged" MouseEnter="SerNumComboBox_MouseEnter"/>
+            <Grid Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Stretch"  Grid.Row="18" VerticalAlignment="Stretch" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Name="AddBTN" Content="Add" HorizontalAlignment="Stretch" Grid.Column="2" VerticalAlignment="Stretch" FontSize="20" Margin="4" Click="AddBTN_Click"/>
+                <Button Name="UpdateBTN" Content="Update" HorizontalAlignment="Stretch" Grid.Column="1" VerticalAlignment="Stretch" FontSize="20" Margin="4" Click="UpdateBTN_Click" />
+                <Button Name="RemoveBTN" Content="Remove" HorizontalAlignment="Stretch" Grid.Column="0" VerticalAlignment="Stretch" FontSize="20" Margin="4" Click="RemoveBTN_Click" />
+            </Grid>
+
+        </Grid>
+
+    </Grid>
+</Window>

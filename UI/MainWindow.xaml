@@ -1,0 +1,41 @@
+﻿<Window x:Class="UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UI"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="FontSize" Value="17"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Button Name="AddNannyBTN" Content="Nannies" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Click="AddNannyBTN_Click"/>
+        <Button Name="AddMotherBTN" Content="Mothers" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Grid.Row="1" Click="AddMotherBTN_Click"/>
+        <Button Name="AddChildBTN" Content="Children" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Grid.Row="2" Click="AddChildBTN_Click"/>
+        <Button Name="ShowNannyBTN" Content="Show all Nannies" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Grid.Column="1" Click="ShowNannyBTN_Click"/>
+        <Button Name="AddContractBTN" Content="Contracts" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Grid.Row="3" Click="AddContractBTN_Click"/>
+        <Button Name="ShowMotherBTN" Content="Show all mothers" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Grid.Column="1" Grid.Row="1" Click="ShowMotherBTN_Click"/>
+        <Button Name="ShowChildBTN" Content="Show all children" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Grid.Column="1" Grid.Row="2" Click="ShowChildBTN_Click"/>
+        <Button x:Name="ShowContractBTN" Content="Show all contracts" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Grid.Column="1" Grid.Row="3" Click="ShowContractBTN_Click"/>
+        <Button Content="Sign Contract"  Grid.ColumnSpan="3" HorizontalAlignment="Stretch" Margin="10" Grid.Row="4" VerticalAlignment="Stretch" Click="Button_Click"/>
+        <Button  Content="Queries" HorizontalAlignment="Stretch" Margin="10" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Stretch" Click="Button_Click_1"/>
+        <Button Content="Grouped Queries" Grid.Column="2" HorizontalAlignment="Stretch" Margin="10" Grid.Row="2" Grid.RowSpan="2" VerticalAlignment="Stretch" Click="Button_Click_2"/>
+
+    </Grid>
+</Window>
