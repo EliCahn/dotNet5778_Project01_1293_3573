@@ -231,7 +231,7 @@ namespace BL
         /// <returns></returns>
         int TotalHours(DateTime[,] hours);
          /// <summary>
-        /// Initializes some variables into the data source
+        /// Initializes some variables into the xml data source if it is empty
         /// </summary>
         void InitSomeVars();
     }
