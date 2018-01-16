@@ -233,8 +233,15 @@ namespace UI
                         groupedlistDisplay.ShowDialog();
                         break;
                     case "Contracts grouped by the distance between the nanny and her location":
-                        groupedlistDisplay = new GroupedListDisplay((string)s, "Go to selected Contract's window", bl.ContractsByDistance(true));
-                        groupedlistDisplay.ShowDialog();
+                        new Thread(() =>
+                        {
+                            List<IGrouping<int, Contract>> ListToDisplay = bl.ContractsByDistance(true);
+                            Dispatcher.Invoke(() =>
+                            {
+                                groupedlistDisplay = new GroupedListDisplay((string)s, "Go to selected Contract's window", ListToDisplay);
+                                groupedlistDisplay.ShowDialog();
+                            });
+                        }).Start();
                         break;
 
                 }

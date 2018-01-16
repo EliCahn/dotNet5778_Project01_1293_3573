@@ -192,7 +192,7 @@ namespace BL
         /// </summary>
         /// <param name="sort">"true" will result in the groups being sorted by distance as well</param>
         /// <returns></returns>
-        IEnumerable<IGrouping<int, Contract>> ContractsByDistance(bool sort = false);
+        List<IGrouping<int, Contract>> ContractsByDistance(bool sort = false);
         /// <summary>
         /// returns a short version of the string of the nanny
         /// </summary>

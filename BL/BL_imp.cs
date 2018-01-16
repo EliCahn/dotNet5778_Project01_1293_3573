@@ -151,15 +151,15 @@ namespace BL
         /// </summary>
         /// <param name="sort">"true" will result in the groups being sorted by distance as well</param>
         /// <returns></returns>
-        public IEnumerable<IGrouping<int, Contract>> ContractsByDistance(bool sort = false)
+        public List<IGrouping<int, Contract>> ContractsByDistance(bool sort = false)
         {
             if (sort)
-                return from Contract c in GetContracts()
+                return (from Contract c in GetContracts()
                        orderby Distance(FindNannyByID(c.NannyID).Address, (FindMotherByID(FindChildByID(c.ChildID).MotherID).NeedNannyAddress == "" ? FindMotherByID(FindChildByID(c.ChildID).MotherID).Address : FindMotherByID(FindChildByID(c.ChildID).MotherID).NeedNannyAddress))
-                       group c by Distance(FindNannyByID(c.NannyID).Address, (FindMotherByID(FindChildByID(c.ChildID).MotherID).NeedNannyAddress == "" ? FindMotherByID(FindChildByID(c.ChildID).MotherID).Address : FindMotherByID(FindChildByID(c.ChildID).MotherID).NeedNannyAddress)) /1000;
+                       group c by Distance(FindNannyByID(c.NannyID).Address, (FindMotherByID(FindChildByID(c.ChildID).MotherID).NeedNannyAddress == "" ? FindMotherByID(FindChildByID(c.ChildID).MotherID).Address : FindMotherByID(FindChildByID(c.ChildID).MotherID).NeedNannyAddress)) /1000).ToList();
             else
-                return from Contract c in GetContracts()
-                       group c by Distance(FindNannyByID(c.NannyID).Address, (FindMotherByID(FindChildByID(c.ChildID).MotherID).NeedNannyAddress == "" ? FindMotherByID(FindChildByID(c.ChildID).MotherID).Address : FindMotherByID(FindChildByID(c.ChildID).MotherID).NeedNannyAddress)) / 1000;
+                return (from Contract c in GetContracts()
+                       group c by Distance(FindNannyByID(c.NannyID).Address, (FindMotherByID(FindChildByID(c.ChildID).MotherID).NeedNannyAddress == "" ? FindMotherByID(FindChildByID(c.ChildID).MotherID).Address : FindMotherByID(FindChildByID(c.ChildID).MotherID).NeedNannyAddress)) / 1000).ToList();
         }
         /// <summary>
         /// calculates and returns distance between 2 addresses
