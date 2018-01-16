@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mothers>
+  <Mother>
+    <ID>001</ID>
+    <FirstName>leia</FirstName>
+    <LastName>organa</LastName>
+    <Phone>058-012-34-56</Phone>
+    <Address>Hertzel, Tel-Aviv, Israel</Address>
+    <NeedNannyAddress></NeedNannyAddress>
+    <Comments>
+      <Comment>a comment...</Comment>
+    </Comments>
+    <HoursNeeded>
+      <Sunday>
+        <Begin>15</Begin>
+        <End>23</End>
+      </Sunday>
+      <Monday>
+        <Begin>8</Begin>
+        <End>15</End>
+      </Monday>
+      <Tuesday>
+        <Begin>9</Begin>
+        <End>19</End>
+      </Tuesday>
+      <Wednesday>
+        <Begin>10</Begin>
+        <End>18</End>
+      </Wednesday>
+      <Thursday>
+        <Begin>8</Begin>
+        <End>16</End>
+      </Thursday>
+      <Friday>
+        <Begin>0</Begin>
+        <End>0</End>
+      </Friday>
+    </HoursNeeded>
+    <DaysNeeded>
+      <Sunday>true</Sunday>
+      <Monday>true</Monday>
+      <Tuesday>true</Tuesday>
+      <Wednesday>true</Wednesday>
+      <Thursday>true</Thursday>
+      <Friday>false</Friday>
+    </DaysNeeded>
+  </Mother>
+</Mothers>

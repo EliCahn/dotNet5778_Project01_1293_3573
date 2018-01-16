@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Contracts>
+  <Contract>
+    <SerialNumber>10000000</SerialNumber>
+    <ChildID>901</ChildID>
+    <NannyID>123</NannyID>
+    <PerHour>0</PerHour>
+    <PerMonth>0</PerMonth>
+    <IsByHour>false</IsByHour>
+    <IsMet>false</IsMet>
+    <IsSigned>false</IsSigned>
+    <Beginning>
+      <Year>2018</Year>
+      <Month>1</Month>
+      <Day>1</Day>
+    </Beginning>
+    <End>
+      <Year>2018</Year>
+      <Month>3</Month>
+      <Day>1</Day>
+    </End>
+  </Contract>
+  <Contract>
+    <SerialNumber>10000001</SerialNumber>
+    <ChildID>902</ChildID>
+    <NannyID>123</NannyID>
+    <PerHour>0</PerHour>
+    <PerMonth>0</PerMonth>
+    <IsByHour>false</IsByHour>
+    <IsMet>true</IsMet>
+    <IsSigned>false</IsSigned>
+    <Beginning>
+      <Year>2018</Year>
+      <Month>1</Month>
+      <Day>5</Day>
+    </Beginning>
+    <End>
+      <Year>2018</Year>
+      <Month>3</Month>
+      <Day>5</Day>
+    </End>
+  </Contract>
+</Contracts>

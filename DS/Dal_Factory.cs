@@ -14,6 +14,6 @@ namespace DS
         /// <summary>
         /// gets an instance of the implementation of the IDAL
         /// </summary>
-        public static DAL.Idal Instance { get => DS.Dal_imp.Instance; } //editable to switch to any other implementation
+        public static DAL.Idal Instance { get => DAL.Dal_XML_imp.Instance; } //editable to switch to any other implementation
     }
 }

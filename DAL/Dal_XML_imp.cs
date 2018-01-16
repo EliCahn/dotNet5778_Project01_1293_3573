@@ -9,15 +9,27 @@ using System.Xml.Linq;
 
 namespace DAL
 {
-    class Dal_XML_imp : Idal
+    public class Dal_XML_imp : Idal
     {
         static int SerialNum = 10000000; //needs to be removed
-        static string Address = (Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory()).FullName)).FullName + "\\Resources";
+        static string Address = Directory.GetParent((Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory()).FullName)).FullName).FullName + "\\DAL\\Resources";
         static XElement ChildrenRoot;
         static XElement MothersRoot;
         static XElement NanniesRoot;
         static XElement ContractsRoot;
         protected enum TypeToLoad { Nanny, Mother, Child, Contract}
+
+        static Dal_XML_imp instance = null;
+        public static Dal_XML_imp Instance
+        {
+            get
+            {
+                if (instance == null)
+                    instance = new Dal_XML_imp();
+                return instance;
+            }
+        }
+
         protected void LoadData(TypeToLoad t)
         {
             try
@@ -40,7 +52,11 @@ namespace DAL
             }
             catch (Exception)
             {
-                throw new Exception("File upload failed");
+                //throw new Exception("File upload failed");
+                ChildrenRoot = new XElement("Children");
+                ContractsRoot = new XElement("Contracts");
+                MothersRoot = new XElement("Mothers");
+                NanniesRoot = new XElement("Nannies");
             }
         }
         public void AddChild(Child c)
@@ -125,9 +141,10 @@ namespace DAL
             for (int i = 0; i < 6; i++)
             {
                 newMother.Element("DaysNeeded").Add(new XElement(((Days)i).ToString(), m.DaysNeeded[i]));
-                newMother.Element("HoursNeeded").Add(new XElement(((Days)i).ToString()), 
-                    new XElement("Begin", m.HoursNeeded[0, i]), new XElement("End", m.HoursNeeded[1,i]));
+                newMother.Element("HoursNeeded").Add(new XElement(((Days)i).ToString(), 
+                    new XElement("Begin", m.HoursNeeded[0, i].Hour), new XElement("End", m.HoursNeeded[1,i].Hour)));
             }
+            LoadData(TypeToLoad.Mother);
             MothersRoot.Add(newMother);
             MothersRoot.Save(Address + "\\Mothers.xml");
                     
@@ -144,7 +161,37 @@ namespace DAL
             foreach (Mother ch in GetMothers())
                 if (ch.ID == n.ID)
                     throw new Exception("ID already exists!");
-            DataSource.Nannies.Add(n);
+            XElement newNanny = new XElement("Nanny",
+                new XElement("ID", n.ID),
+                new XElement("FirstName", n.FirstName),
+                new XElement("LastName", n.LastName),
+                new XElement("Phone", n.Phone),
+                new XElement("Address", n.Address),
+                new XElement("Expertise", n.Expertise),
+                new XElement("Floor", n.Floor),
+                new XElement("HourSalary", n.HourSalary),
+                new XElement("MonthSalary", n.MonthSalary),
+                new XElement("MaxAge", n.MaxAge),
+                new XElement("MinAge", n.MinAge),
+                new XElement("MaxChildren", n.MaxChildren),
+                new XElement("Elevator", n.Elevator),
+                new XElement("IsCostByHour", n.IsCostByHour),
+                new XElement("VacationByMinisterOfEducation", n.VacationByMinisterOfEducation),
+                new XElement("BirthDate", new XElement("Year", n.BirthDate.Year), new XElement("Month", n.BirthDate.Month), new XElement("Day", n.BirthDate.Day)),
+                new XElement("Recommendations"),
+                new XElement("WorkDays"),
+                new XElement("WorkHours"));
+            foreach (string rec in n.Recommendations)
+                newNanny.Element("Recommendations").Add(new XElement("Reccomendation", rec));
+            for (int i = 0; i < 6; i++)
+            {
+                newNanny.Element("WorkDays").Add(new XElement(((Days)i).ToString(), n.WorkDays[i]));
+                newNanny.Element("WorkHours").Add(new XElement(((Days)i).ToString(),
+                    new XElement("Begin", n.WorkHours[0, i].Hour), new XElement("End", n.WorkHours[1, i].Hour)));
+            }
+            LoadData(TypeToLoad.Nanny);
+            NanniesRoot.Add(newNanny);
+            NanniesRoot.Save(Address + "\\Nannies.xml");
         }
 
         public Child FindChildByID(string id)
@@ -185,7 +232,7 @@ namespace DAL
             }
             catch
             {
-                retList = null;
+                retList = new List<Child>();
             }
             return retList;
         }
@@ -212,7 +259,7 @@ namespace DAL
             }
             catch
             {
-                retList = null;
+                retList = new List<Contract>();
             }
             return retList;
         }
@@ -255,7 +302,7 @@ namespace DAL
             }
             catch
             {
-                retList = null;
+                retList = new List<Mother>();
             }
             return retList;
         }
@@ -308,14 +355,36 @@ namespace DAL
             }
             catch
             {
-                retList = null;
+                retList = new List<Nanny>();
             }
             return retList;
         }
 
         public void InitSomeVars()
         {
-            throw new NotImplementedException();
+            if (GetNannies().Count > 0 || GetMothers().Count > 0 || GetChildren().Count > 0 || GetContracts().Count > 0)
+                return;
+            DateTime[,] hours1 = new DateTime[,] { { default(DateTime).AddHours(8), default(DateTime).AddHours(8), default(DateTime).AddHours(8), default(DateTime).AddHours(8), default(DateTime).AddHours(8), default(DateTime).AddHours(8) }, { default(DateTime).AddHours(15), default(DateTime).AddHours(15), default(DateTime).AddHours(19), default(DateTime).AddHours(19), default(DateTime).AddHours(19), default(DateTime).AddHours(19) } },
+                hours2 = new DateTime[,] { { default(DateTime).AddHours(15), default(DateTime).AddHours(8), default(DateTime).AddHours(9), default(DateTime).AddHours(10), default(DateTime).AddHours(8), default(DateTime).AddHours(8) }, { default(DateTime).AddHours(23), default(DateTime).AddHours(15), default(DateTime).AddHours(19), default(DateTime).AddHours(18), default(DateTime).AddHours(16), default(DateTime).AddHours(19) } };
+            List<string> recs1 = new List<string>(), coms1 = new List<string>();
+            coms1.Add("a comment...");
+            recs1.Add("very patient");
+            recs1.Add("especially good with the youngest ones");
+            Nanny n = new Nanny("123", "sara", "levi", "052-000-00-01", "Bialik, Ramat-Gan, Israel", new DateTime(1990, 1, 1), true, true, true, 5, 1, 4, 20, 20, 2000, 3, new bool[] { true, true, true, true, true, false, false }, hours1, recs1);
+            Nanny n1 = new Nanny("1234", "rivka", "levi", "052-000-50-01", "Shaanan, Ramat-Gan, Israel", new DateTime(1990, 1, 1), true, false, true, 4, 6, 1, 12, 40, 3000, 3, new bool[] { false, true, true, true, true, true, true }, hours2, recs1);
+            Mother m = new Mother("001", "leia", "organa", "058-012-34-56", "Hertzel, Tel-Aviv, Israel", "", new bool[] { true, true, true, true, true, false, false }, hours2, coms1);
+            Child c1 = new Child("901", "001", "ruben", "organa", null, new DateTime(2017, 5, 1)),
+                c2 = new Child("902", "001", "simon", "organa", null, new DateTime(2017, 5, 5));
+            Contract con1 = new Contract(n.ID, c1.ID, false, new DateTime(2018, 1, 1), new DateTime(2018, 3, 1)),
+                con2 = new Contract(n.ID, c2.ID, true, new DateTime(2018, 1, 5), new DateTime(2018, 3, 5));
+            //SignContract(con2);
+            AddNanny(n);
+            AddNanny(n1);
+            AddMother(m);
+            AddChild(c1);
+            AddChild(c2);
+            AddContract(con1);
+            AddContract(con2);
         }
 
         public void RemoveChild(Child c)
