@@ -270,9 +270,9 @@ namespace BL
         /// </summary>
         /// <param name="m">the mother in question</param>
         /// <returns></returns>
-        public IEnumerable<Nanny> ProximityNannies(Mother m)
+        public List<Nanny> ProximityNannies(Mother m)
         {// assuming an "acceptable distance" is 30km
-            return from Nanny n in GetNannies() where Distance(n.Address, (m.NeedNannyAddress == "" ? m.Address : m.NeedNannyAddress)) <= 30000 select n;
+            return (from Nanny n in GetNannies() where Distance(n.Address, (m.NeedNannyAddress == "" ? m.Address : m.NeedNannyAddress)) <= 30000 select n).ToList();
         }
         /// <summary>
         /// removes a child

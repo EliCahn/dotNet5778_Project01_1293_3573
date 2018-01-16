@@ -45,4 +45,47 @@
       <Friday>false</Friday>
     </DaysNeeded>
   </Mother>
+  <Mother>
+    <ID>002</ID>
+    <FirstName>Shira</FirstName>
+    <LastName>Raban</LastName>
+    <Phone>0526666666</Phone>
+    <Address>Hertzel, Ramat-Gan, Israel</Address>
+    <NeedNannyAddress></NeedNannyAddress>
+    <Comments />
+    <HoursNeeded>
+      <Sunday>
+        <Begin>5</Begin>
+        <End>18</End>
+      </Sunday>
+      <Monday>
+        <Begin>0</Begin>
+        <End>0</End>
+      </Monday>
+      <Tuesday>
+        <Begin>0</Begin>
+        <End>0</End>
+      </Tuesday>
+      <Wednesday>
+        <Begin>0</Begin>
+        <End>0</End>
+      </Wednesday>
+      <Thursday>
+        <Begin>0</Begin>
+        <End>0</End>
+      </Thursday>
+      <Friday>
+        <Begin>0</Begin>
+        <End>0</End>
+      </Friday>
+    </HoursNeeded>
+    <DaysNeeded>
+      <Sunday>true</Sunday>
+      <Monday>false</Monday>
+      <Tuesday>false</Tuesday>
+      <Wednesday>false</Wednesday>
+      <Thursday>false</Thursday>
+      <Friday>false</Friday>
+    </DaysNeeded>
+  </Mother>
 </Mothers>

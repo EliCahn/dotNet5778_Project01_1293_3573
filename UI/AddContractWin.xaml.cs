@@ -163,17 +163,17 @@ namespace UI
         {
             try
             {
-                Dispatcher.Invoke(() => childIDTextBox.IsEnabled = false); //Temporary locking changes to this property to prevent disturbances to the thread's work
+                Dispatcher.Invoke(() => { childIDTextBox.IsEnabled = false; nannyIDTextBox.IsEnabled = false; }); //Temporary locking changes to this property to prevent disturbances to the thread's work
                 Mother MotherOfContract = (Mother)args;
-                IEnumerable<Nanny> proxNannies = MainWindow.bl.ProximityNannies(MotherOfContract);
-                IEnumerable<Nanny> NanniesWithHoursAndWithingProximity = MainWindow.bl.SuitableNannies(MotherOfContract).Intersect(proxNannies);
+                List<Nanny> proxNannies = MainWindow.bl.ProximityNannies(MotherOfContract).ToList();
+                List<Nanny> NanniesWithHoursAndWithingProximity = MainWindow.bl.SuitableNannies(MotherOfContract).Intersect(proxNannies).ToList();
                 foreach (Nanny n in NanniesWithHoursAndWithingProximity)
                     Dispatcher.Invoke(() => { nannyIDTextBox.Items.Add(n.ID); /*nannyIDTextBox.Items.Remove("No match found!")*/; nannyIDTextBox.SelectedIndex = -1; nannyIDTextBox.IsEnabled = true; });
-                IEnumerable<Nanny> NanniesWithHours = from Nanny n in MainWindow.bl.GetNannies() where MainWindow.bl.TotalHours(MainWindow.bl.IntersectHours(n, MotherOfContract)) > 0 select n;
+                List<Nanny> NanniesWithHours = (from Nanny n in MainWindow.bl.GetNannies() where MainWindow.bl.TotalHours(MainWindow.bl.IntersectHours(n, MotherOfContract)) > 0 select n).ToList();
 
                 //if (NanniesWithHoursAndWithingProximity.Count() > 0)
                 //    return;
-                NanniesWithHoursAndWithingProximity = MainWindow.bl.Top5Nannies(MotherOfContract).Intersect(proxNannies);
+                NanniesWithHoursAndWithingProximity = MainWindow.bl.Top5Nannies(MotherOfContract).Intersect(proxNannies).ToList();
                 //IEnumerable<Nanny> NanniesWithHours = (IEnumerable<Nanny>)(((object[])args)[0]);
                 //Mother MotherOfContract = (Mother)(((object[])args)[1]);
                 //NanniesWithHoursAndWithingProximity = NanniesWithHours.Intersect(MainWindow.bl.ProximityNannies(MotherOfContract));

@@ -286,14 +286,15 @@ namespace DAL
                     Mother mom = retList.Find(m => m.ID == xmom.Element("ID").Value);
                     foreach (XElement com in xmom.Element("Comments").Elements())
                         mom.Comments.Add(com.Value);
+                    int i = 0;
                     foreach (XElement day in xmom.Element("DaysNeeded").Elements())
                     {
-                        int i = 0;
+                        
                         mom.DaysNeeded[i++] = bool.Parse(day.Value);
                     }
+                    i = 0;
                     foreach (XElement hour in xmom.Element("HoursNeeded").Elements())
-                    {
-                        int i = 0;
+                    {                        
                         mom.HoursNeeded[0, i] = default(DateTime).AddHours(int.Parse(hour.Element("Begin").Value));
                         mom.HoursNeeded[1, i++] = default(DateTime).AddHours(int.Parse(hour.Element("End").Value));
                     }                        
@@ -340,14 +341,14 @@ namespace DAL
                     Nanny nan = retList.Find(n => n.ID == xnan.Element("ID").Value);                    
                     foreach (XElement rec in xnan.Element("Recommendations").Elements())
                         nan.Recommendations.Add(rec.Value);
+                    int i = 0;
                     foreach (XElement day in xnan.Element("WorkDays").Elements())
-                    {
-                        int i = 0;
+                    {                        
                         nan.WorkDays[i++] = bool.Parse(day.Value);
                     }
+                    i = 0;
                     foreach (XElement hour in xnan.Element("WorkHours").Elements())
-                    {
-                        int i = 0;
+                    {                        
                         nan.WorkHours[0, i] = default(DateTime).AddHours(int.Parse(hour.Element("Begin").Value));
                         nan.WorkHours[1, i++] = default(DateTime).AddHours(int.Parse(hour.Element("End").Value));
                     }

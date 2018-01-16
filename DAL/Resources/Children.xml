@@ -26,4 +26,17 @@
     </BirthDate>
     <SpecialNeeds />
   </Child>
+  <Child>
+    <ID>598</ID>
+    <MotherID>002</MotherID>
+    <FirstName>Yoda</FirstName>
+    <LastName>Raban</LastName>
+    <HaveSpecialNeeds>false</HaveSpecialNeeds>
+    <BirthDate>
+      <Year>2017</Year>
+      <Month>4</Month>
+      <Day>6</Day>
+    </BirthDate>
+    <SpecialNeeds />
+  </Child>
 </Children>

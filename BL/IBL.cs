@@ -158,7 +158,7 @@ namespace BL
         /// </summary>
         /// <param name="m">the mother in question</param>
         /// <returns></returns>
-        IEnumerable<Nanny> ProximityNannies(Mother m);
+        List<Nanny> ProximityNannies(Mother m);
          /// <summary>
         /// returns an IEnumerable of all children who have no nanny
         /// </summary>
