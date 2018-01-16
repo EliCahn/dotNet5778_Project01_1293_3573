@@ -45,6 +45,7 @@ namespace DAL
         }
         public void AddChild(Child c)
         {
+            LoadData(TypeToLoad.Child);
             foreach (Nanny n in GetNannies())
                 if (n.ID == c.ID)
                     throw new Exception("ID already exists!");
@@ -72,6 +73,7 @@ namespace DAL
 
         public void AddContract(Contract c)
         {
+            LoadData(TypeToLoad.Contract);
             Nanny NannyInContract = FindNannyByID(c.NannyID);
             Child ChildInContract = FindChildByID(c.ChildID);
             if (NannyInContract == null)
@@ -81,17 +83,68 @@ namespace DAL
             foreach (Contract con in GetContracts())
                 if (con.ChildID == c.ChildID && con.NannyID == c.NannyID)
                     throw new Exception("Contarct between this nanny and child already exists");
-            c.SerialNumber = (SerialNum++).ToString();
+            c.SerialNumber = (SerialNum++).ToString();            
+            XElement newContract = new XElement("Contract", 
+                new XElement("SerialNumber", c.SerialNumber),
+                new XElement("ChildID", c.ChildID),
+                new XElement("NannyID", c.NannyID),
+                new XElement("PerHour", c.PerHour),
+                new XElement("PerMonth", c.PerMonth),
+                new XElement("IsByHour", c.IsByHour),
+                new XElement("IsMet", c.IsMet),
+                new XElement("IsSigned", c.IsSigned),
+                new XElement("Beginning", new XElement("Year", c.Beginning.Year), new XElement("Month", c.Beginning.Month), new XElement("Day", c.Beginning.Day)),
+                new XElement("End", new XElement("Year", c.End.Year), new XElement("Month", c.End.Month), new XElement("Day", c.End.Day)));
+            ContractsRoot.Add(newContract);
+            ContractsRoot.Save(Address + "\\Contracts.xml");
         }
 
         public void AddMother(Mother m)
         {
-            throw new NotImplementedException();
+            foreach (Nanny ch in GetNannies())
+                if (ch.ID == m.ID)
+                    throw new Exception("ID already exists!");
+            foreach (Child ch in GetChildren())
+                if (ch.ID == m.ID)
+                    throw new Exception("ID already exists!");
+            foreach (Mother ch in GetMothers())
+                if (ch.ID == m.ID)
+                    throw new Exception("ID already exists!");
+            XElement newMother = new XElement("Mother",
+                new XElement("ID", m.ID),
+                new XElement("FirstName", m.FirstName),
+                new XElement("LastName", m.LastName),
+                new XElement("Phone", m.Phone),
+                new XElement("Address", m.Address),
+                new XElement("NeedNannyAddress", m.NeedNannyAddress),
+                new XElement("Comments"),
+                new XElement("HoursNeeded"),
+                new XElement("DaysNeeded"));
+            foreach (string comment in m.Comments)
+                newMother.Element("Comments").Add(new XElement("Comment", comment));
+            for (int i = 0; i < 6; i++)
+            {
+                newMother.Element("DaysNeeded").Add(new XElement(((Days)i).ToString(), m.DaysNeeded[i]));
+                newMother.Element("HoursNeeded").Add(new XElement(((Days)i).ToString()), 
+                    new XElement("Begin", m.HoursNeeded[0, i]), new XElement("End", m.HoursNeeded[1,i]));
+            }
+            MothersRoot.Add(newMother);
+            MothersRoot.Save(Address + "\\Mothers.xml");
+                    
         }
 
         public void AddNanny(Nanny n)
         {
-            throw new NotImplementedException();
+            foreach (Nanny ch in GetNannies())
+                if (ch.ID == n.ID)
+                    throw new Exception("ID already exists!");
+            foreach (Child ch in GetChildren())
+                if (ch.ID == n.ID)
+                    throw new Exception("ID already exists!");
+            foreach (Mother ch in GetMothers())
+                if (ch.ID == n.ID)
+                    throw new Exception("ID already exists!");
+            DataSource.Nannies.Add(n);
         }
 
         public Child FindChildByID(string id)
