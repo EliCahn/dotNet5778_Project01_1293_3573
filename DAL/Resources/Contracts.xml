@@ -4,15 +4,15 @@
     <SerialNumber>10000000</SerialNumber>
     <ChildID>901</ChildID>
     <NannyID>123</NannyID>
-    <PerHour>0</PerHour>
-    <PerMonth>0</PerMonth>
-    <IsByHour>false</IsByHour>
-    <IsMet>false</IsMet>
+    <PerHour>20</PerHour>
+    <PerMonth>2352</PerMonth>
+    <IsByHour>True</IsByHour>
+    <IsMet>True</IsMet>
     <IsSigned>false</IsSigned>
     <Beginning>
-      <Year>2018</Year>
-      <Month>1</Month>
-      <Day>1</Day>
+      <Year>2017</Year>
+      <Month>7</Month>
+      <Day>31</Day>
     </Beginning>
     <End>
       <Year>2018</Year>
@@ -24,11 +24,11 @@
     <SerialNumber>10000001</SerialNumber>
     <ChildID>902</ChildID>
     <NannyID>123</NannyID>
-    <PerHour>0</PerHour>
-    <PerMonth>0</PerMonth>
-    <IsByHour>false</IsByHour>
-    <IsMet>true</IsMet>
-    <IsSigned>false</IsSigned>
+    <PerHour>20</PerHour>
+    <PerMonth>2352</PerMonth>
+    <IsByHour>True</IsByHour>
+    <IsMet>False</IsMet>
+    <IsSigned>True</IsSigned>
     <Beginning>
       <Year>2018</Year>
       <Month>1</Month>
@@ -37,7 +37,7 @@
     <End>
       <Year>2018</Year>
       <Month>3</Month>
-      <Day>5</Day>
+      <Day>30</Day>
     </End>
   </Contract>
 </Contracts>

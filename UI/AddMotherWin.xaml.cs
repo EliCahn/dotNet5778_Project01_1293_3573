@@ -66,6 +66,7 @@ namespace UI
                     tempMother.HoursNeeded[0, i] = hours[0, i];
                     tempMother.HoursNeeded[1, i] = hours[1, i];
                 }
+                tempMother.Comments.Clear();
                 foreach (string str in coms.GetListString())
                     tempMother.Comments.Add(str);
                 Mother m = new Mother(tempMother);  // This is to prevent the binding from further altering the Nanny
@@ -187,10 +188,16 @@ namespace UI
                 MainWindow.bl.UpdateMother(target, Mother.Props.NeedNannyAddress, tempMother.NeedNannyAddress);
                 bool[] days = new bool[7];
                 for (int i = 0; i < 6; i++)
+                {
                     days[i] = (bool)h.Check[i].IsChecked;
+                    target.DaysNeeded[i] = (bool)h.Check[i].IsChecked;
+                }
+
+                h.GetMatrix();
                 MainWindow.bl.UpdateMother(target, Mother.Props.DaysNeeded, days);
                 MainWindow.bl.UpdateMother(target, Mother.Props.HoursNeeded, h.GetMatrix());
-                target.Comments.Clear();
+                //target.Comments.Clear();
+                MainWindow.bl.ClearListString(target);
                 foreach (string str in coms.GetListString())
                     MainWindow.bl.UpdateMother(target, Mother.Props.Comments, str);
                 if (MessageBox.Show("Update was succesful, do you wish to stay on the Mother window?", "Success", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)

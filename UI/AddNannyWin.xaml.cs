@@ -345,7 +345,10 @@ namespace UI
                 MainWindow.bl.UpdateNanny(target, Nanny.Props.VacationByMinisterOfEducation, tempNanny.VacationByMinisterOfEducation);
                 bool[] days = new bool[7];
                 for (int i = 0; i < 6; i++)
-                    days[i] = (bool)h.Check[i].IsChecked;                
+                {
+                    days[i] = (bool)h.Check[i].IsChecked;
+                    target.WorkDays[i] = (bool)h.Check[i].IsChecked;
+                }
                 MainWindow.bl.UpdateNanny(target, Nanny.Props.WorkDays, days);
                 MainWindow.bl.UpdateNanny(target, Nanny.Props.WorkHours, h.GetMatrix());                
                 target.Recommendations.Clear();

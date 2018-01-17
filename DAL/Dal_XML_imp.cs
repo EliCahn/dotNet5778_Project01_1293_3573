@@ -390,37 +390,367 @@ namespace DAL
 
         public void RemoveChild(Child c)
         {
-            throw new NotImplementedException();
+            string ContractNumber = "";            
+            IEnumerable<string> srNums = from Contract con in GetContracts()
+                                         where con.ChildID == c.ID
+                                         select con.SerialNumber;
+            //foreach (Contract con in DataSource.Contracts)
+            //{
+            //    if (con.ChildID == c.ID)
+            //        ContractNumber += "\n" + con.SerialNumber;
+            //}
+            foreach (string srNum in srNums)
+                ContractNumber += "\n" + srNum;
+            if (ContractNumber == "")
+            {
+                LoadData(TypeToLoad.Contract);
+                XElement target;
+                target = (from ch in ChildrenRoot.Elements()
+                          where ch.Element("ID").Value == c.ID
+                          select ch).FirstOrDefault();
+                target.Remove();
+                ChildrenRoot.Save(Address + "\\Children.xml");
+            }
+            else
+                throw new Exception("Child still involved in contracts. Serial numbers:" + ContractNumber);
         }
 
         public void RemoveContract(Contract c)
         {
-            throw new NotImplementedException();
+            LoadData(TypeToLoad.Contract);
+            XElement target;
+            target = (from con in ContractsRoot.Elements()
+                      where con.Element("SerialNumber").Value == c.SerialNumber
+                      select con).FirstOrDefault();
+            target.Remove();
+            ContractsRoot.Save(Address + "\\Contracts.xml");
         }
+
+
+
+
 
         public void RemoveMother(Mother m)
         {
-            throw new NotImplementedException();
+            string childrenID = "";
+            IEnumerable<string> IDs = from Child ch in GetChildren()
+                                      where ch.MotherID == m.ID
+                                      select ch.ID;
+            //foreach(Child ch in DataSource.Children)
+            //{
+            //    if (ch.MotherID == m.ID)
+            //        childrenID += "\n" + ch.ID;
+            //}
+            foreach (string id in IDs)
+                childrenID += "\n" + id;
+            if (childrenID == "")
+            {
+                LoadData(TypeToLoad.Mother);
+                XElement target;
+                target = (from mom in MothersRoot.Elements()
+                          where mom.Element("ID").Value == m.ID
+                          select mom).FirstOrDefault();
+                target.Remove();
+                MothersRoot.Save(Address + "\\Mothers.xml");
+            }
+            else
+                throw new Exception("Mother still has children. IDs:" + childrenID);
         }
 
         public void RemoveNanny(Nanny n)
         {
-            throw new NotImplementedException();
+            string ContractNumber = "";
+            IEnumerable<string> serialInvolveNanny = from Contract con in GetContracts()
+                                                     where con.NannyID == n.ID
+                                                     select con.SerialNumber;
+            //foreach (Contract con in DataSource.Contracts)
+            //{
+            //    if (con.NannyID == n.ID)
+            //        ContractNumber += "\n" + con.SerialNumber;
+            //}
+            foreach (string srNum in serialInvolveNanny)
+                ContractNumber += "\n" + srNum;
+            if (ContractNumber == "")
+            {
+                LoadData(TypeToLoad.Nanny);
+                XElement target;
+                target = (from nan in NanniesRoot.Elements()
+                          where nan.Element("ID").Value == n.ID
+                          select nan).FirstOrDefault();
+                target.Remove();
+                NanniesRoot.Save(Address + "\\Nannies.xml");
+            }
+            else
+                throw new Exception("Nanny still has contracts. Serial numbers:" + ContractNumber);
         }
 
         public void UpdateChild(Child c, Child.Props prop, object newVal)
         {
-            throw new NotImplementedException();
+            LoadData(TypeToLoad.Child);
+            XElement ChildToUpdate = (from ch in ChildrenRoot.Elements()
+                              where ch.Element("ID").Value == c.ID
+                              select ch).FirstOrDefault();
+            switch (prop)
+            {
+                //case Child.Props.BirthDate:
+                //    if (newVal is DateTime)
+                //        c.BirthDate = (DateTime)newVal;
+                //    else
+                //        throw new Exception("wrong type for the 3rd parameter");
+                //    break;
+                case Child.Props.FirstName:
+                    if (newVal is string)
+                        ChildToUpdate.Element("FirstName").Value = (string)newVal;
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Child.Props.HaveSpecialNeeds:
+                    if (newVal is bool)
+                    {
+                        ChildToUpdate.Element("HaveSpecialNeeds").Value = newVal.ToString();
+                        if (!(bool)newVal)
+                            ChildToUpdate.Element("SpecialNeeds").RemoveAll(); // if the child has no special needs, that means the list of them makes no sense
+                    }
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                //case Child.Props.ID:
+                //    if (newVal is string)
+                //    {
+                //        foreach (Nanny ch in DataSource.Nannies)
+                //            if (ch.ID == c.ID)
+                //                throw new Exception("ID already exists!");
+                //        foreach (Child ch in DataSource.Children)
+                //            if (ch != c && ch.ID == c.ID)
+                //                throw new Exception("ID already exists!");
+                //        foreach (Mother ch in DataSource.Mothers)
+                //            if (ch.ID == c.ID)
+                //                throw new Exception("ID already exists!");
+                //        c.ID = (string)newVal;
+                //    }
+                //    else
+                //        throw new Exception("wrong type for the 3rd parameter");
+                //    break;
+                case Child.Props.LastName:
+                    if (newVal is string)
+                        ChildToUpdate.Element("LastName").Value = (string)newVal;
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Child.Props.MotherID:
+                    if (newVal is string)
+                        foreach (Mother ch in GetMothers())
+                            if (ch.ID == (string)newVal)
+                            {
+                                ChildToUpdate.Element("MotherID").Value = (string)newVal;
+                                break;
+                            }
+                            else
+                                throw new Exception("mother doesn't exist");
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Child.Props.SpecialNeeds:
+                    if (newVal is string)
+                    {
+                        ChildToUpdate.Element("SpecialNeeds").Add(new XElement("Need", (string)newVal));
+                        ChildToUpdate.Element("HaveSpecialNeeds").Value = "true";              // else the added speical need makes no sense. Note that this is actually a kind of "explicit binding" between the 2 fields
+                    }
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+            }
+            ChildrenRoot.Save(Address + "\\Children.xml");
         }
 
         public void UpdateContract(Contract c, Contract.Props prop, object newVal)
         {
-            throw new NotImplementedException();
+            LoadData(TypeToLoad.Contract);
+            XElement ContractToUpdate = (from ch in ContractsRoot.Elements()
+                                      where ch.Element("SerialNumber").Value == c.SerialNumber
+                                      select ch).FirstOrDefault();
+            switch (prop)
+            {
+                case Contract.Props.Beginning:
+                    if (newVal is DateTime)
+                    {
+                        ContractToUpdate.Element("Beginning").RemoveAll();
+                        ContractToUpdate.Element("Beginning").Add(new XElement("Year", ((DateTime)newVal).Year), new XElement("Month", ((DateTime)newVal).Month), new XElement("Day", ((DateTime)newVal).Day));
+                    }
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Contract.Props.ChildID:
+                    if (newVal is string)
+                        foreach (Child ch in GetChildren())
+                        {
+                            if (ch.ID == (string)newVal)
+                            {
+                                ContractToUpdate.Element("ChildID").Value  = (string)newVal;
+                                break;
+                            }
+                            //else
+                            //    throw new Exception("child doesn't exist");
+                        }
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Contract.Props.End:
+                    if (newVal is DateTime)
+                    {
+                        ContractToUpdate.Element("End").RemoveAll();
+                        ContractToUpdate.Element("End").Add(new XElement("Year", ((DateTime)newVal).Year), new XElement("Month", ((DateTime)newVal).Month), new XElement("Day", ((DateTime)newVal).Day));
+                    }
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Contract.Props.IsByHour:
+                    if (newVal is bool)
+                        ContractToUpdate.Element("IsByHour").Value  = newVal.ToString();
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Contract.Props.IsMet:
+                    if (newVal is bool)
+                        ContractToUpdate.Element("IsMet").Value = newVal.ToString();
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Contract.Props.IsSigned:
+                    if (newVal is bool)
+                        ContractToUpdate.Element("IsSigned").Value = newVal.ToString();
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Contract.Props.NannyID:
+                    if (newVal is string)
+                        foreach (Nanny ch in GetNannies())
+                            if (ch.ID == (string)newVal)
+                            {
+                                ContractToUpdate.Element("NannyID").Value = (string)newVal;
+                                break;
+                            }
+                            else
+                                throw new Exception("nanny doesn't exist");
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Contract.Props.PerHour:
+                    if (newVal is int)
+                        ContractToUpdate.Element("PerHour").Value  = newVal.ToString();
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Contract.Props.PerMonth:
+                    if (newVal is int)
+                        ContractToUpdate.Element("PerMonth").Value = newVal.ToString();
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+            }
+            ContractsRoot.Save(Address + "\\Contracts.xml");
         }
 
         public void UpdateMother(Mother m, Mother.Props prop, object newVal)
         {
-            throw new NotImplementedException();
+            LoadData(TypeToLoad.Mother);
+            XElement MotherToUpdate = (from ch in MothersRoot.Elements()
+                                       where ch.Element("ID").Value == m.ID
+                                       select ch).FirstOrDefault();
+            switch (prop)
+            {
+                case Mother.Props.Address:
+                    if (newVal is string)
+                        MotherToUpdate.Element("Address").Value = (string)newVal;
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Mother.Props.Comments:
+                    if (newVal is string)
+                    {
+                        //MotherToUpdate.Element("Comments").RemoveAll();
+                        //foreach (string comment in m.Comments)
+                        //    MotherToUpdate.Element("Comments").Add(new XElement("Comment", comment));
+                        MotherToUpdate.Element("Comments").Add(new XElement("Comment", (string)newVal));
+                    }
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Mother.Props.DaysNeeded:
+                    if (newVal is bool[] && ((bool[])newVal).Length == 7)
+                    {
+                        MotherToUpdate.Element("DaysNeeded").RemoveAll();
+                        for (int i = 0; i < 6; i++)
+                            //m.DaysNeeded[i] = ((bool[])newVal)[i];
+                            MotherToUpdate.Element("DaysNeeded").Add(new XElement(((Days)i).ToString(), ((bool[])newVal)[i]));
+                    }
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Mother.Props.FirstName:
+                    if (newVal is string)
+                        MotherToUpdate.Element("FirstName").Value = (string)newVal;
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Mother.Props.HoursNeeded:
+                    DateTime[,] temp = newVal as DateTime[,];
+                    if (temp != null && temp.GetLength(0) == 2 && temp.GetLength(1) == 6)
+                    {
+                        MotherToUpdate.Element("HoursNeeded").RemoveAll();
+                        for (int i = 0; i < 6; i++)
+                        {
+                            MotherToUpdate.Element("HoursNeeded").Add(new XElement(((Days)i).ToString(), new XElement("Begin", temp[0,i].Hour), new XElement("End", temp[1, i].Hour)));
+                            //m.HoursNeeded[0, i] = temp[0, i];
+                            //m.HoursNeeded[1, i] = temp[1, i];
+                        }
+                    }
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Mother.Props.LastName:
+                    if (newVal is string)
+                        MotherToUpdate.Element("LastName").Value = (string)newVal;
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Mother.Props.NeedNannyAddress:
+                    if (newVal is string)
+                        MotherToUpdate.Element("NeedNannyAddress").Value = (string)newVal;
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Mother.Props.Phone:
+                    if (newVal is string)
+                        MotherToUpdate.Element("Phone").Value = (string)newVal;
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+            }
+            MothersRoot.Save(Address + "\\Mothers.xml");
+        }
+
+        public void ClearListString(object target)
+        {
+            if (target is Mother)
+            {
+                LoadData(TypeToLoad.Mother);
+                XElement MotherToUpdate = (from ch in MothersRoot.Elements()
+                                           where ch.Element("ID").Value == (target as Mother).ID
+                                           select ch).FirstOrDefault();
+                MotherToUpdate.Element("Comments").RemoveAll();
+                MothersRoot.Save(Address + "\\Mothers.xml");
+            }
+            else if (target is Nanny)
+            {
+                LoadData(TypeToLoad.Nanny);
+                XElement NannyToUpdate = (from ch in NanniesRoot.Elements()
+                                          where ch.Element("ID").Value == (target as Nanny).ID
+                                          select ch).FirstOrDefault();
+                NannyToUpdate.Element("Recommendations").RemoveAll();
+                NanniesRoot.Save(Address + "\\Nannies.xml");
+            }
+            else throw new Exception("Illegal parameter type!");
         }
 
         public void UpdateNanny(Nanny n, Nanny.Props prop, object newVal)

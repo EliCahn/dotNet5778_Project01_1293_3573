@@ -183,7 +183,7 @@ namespace UI
                 MainWindow.bl.UpdateChild(target, Child.Props.FirstName, tempChild.FirstName);
                 MainWindow.bl.UpdateChild(target, Child.Props.LastName, tempChild.LastName);
                 MainWindow.bl.UpdateChild(target, Child.Props.HaveSpecialNeeds, tempChild.HaveSpecialNeeds);
-                if (target.HaveSpecialNeeds)
+                if (tempChild.HaveSpecialNeeds)
                     foreach (string str in needs.GetListString())
                         MainWindow.bl.UpdateChild(target, Child.Props.SpecialNeeds, str);
                 if (MessageBox.Show("Update was succesful, do you wish to stay on the Children window?", "Success", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)

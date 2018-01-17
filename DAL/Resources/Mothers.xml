@@ -2,26 +2,29 @@
 <Mothers>
   <Mother>
     <ID>001</ID>
-    <FirstName>leia</FirstName>
+    <FirstName>leiana</FirstName>
     <LastName>organa</LastName>
     <Phone>058-012-34-56</Phone>
     <Address>Hertzel, Tel-Aviv, Israel</Address>
     <NeedNannyAddress></NeedNannyAddress>
     <Comments>
-      <Comment>a comment...</Comment>
+      <Comment>Comment A</Comment>
+      <Comment>Comment B</Comment>
+      <Comment>Comment C</Comment>
+      <Comment>and another comment</Comment>
     </Comments>
     <HoursNeeded>
       <Sunday>
-        <Begin>15</Begin>
-        <End>23</End>
+        <Begin>1</Begin>
+        <End>20</End>
       </Sunday>
       <Monday>
         <Begin>8</Begin>
         <End>15</End>
       </Monday>
       <Tuesday>
-        <Begin>9</Begin>
-        <End>19</End>
+        <Begin>0</Begin>
+        <End>0</End>
       </Tuesday>
       <Wednesday>
         <Begin>10</Begin>
@@ -39,7 +42,7 @@
     <DaysNeeded>
       <Sunday>true</Sunday>
       <Monday>true</Monday>
-      <Tuesday>true</Tuesday>
+      <Tuesday>false</Tuesday>
       <Wednesday>true</Wednesday>
       <Thursday>true</Thursday>
       <Friday>false</Friday>
@@ -47,24 +50,26 @@
   </Mother>
   <Mother>
     <ID>002</ID>
-    <FirstName>Shira</FirstName>
-    <LastName>Raban</LastName>
-    <Phone>0526666666</Phone>
-    <Address>Goldbrunenplaz, Zurich, Schweiz</Address>
+    <FirstName>Padme</FirstName>
+    <LastName>Amidala</LastName>
+    <Phone>0526987147</Phone>
+    <Address>Ben-Yehuda, Jerusalem, Israel</Address>
     <NeedNannyAddress></NeedNannyAddress>
-    <Comments />
+    <Comments>
+      <Comment>Comment D</Comment>
+    </Comments>
     <HoursNeeded>
       <Sunday>
-        <Begin>5</Begin>
-        <End>18</End>
+        <Begin>4</Begin>
+        <End>9</End>
       </Sunday>
       <Monday>
-        <Begin>0</Begin>
-        <End>0</End>
+        <Begin>8</Begin>
+        <End>18</End>
       </Monday>
       <Tuesday>
-        <Begin>0</Begin>
-        <End>0</End>
+        <Begin>8</Begin>
+        <End>16</End>
       </Tuesday>
       <Wednesday>
         <Begin>0</Begin>
@@ -81,8 +86,53 @@
     </HoursNeeded>
     <DaysNeeded>
       <Sunday>true</Sunday>
-      <Monday>false</Monday>
-      <Tuesday>false</Tuesday>
+      <Monday>true</Monday>
+      <Tuesday>true</Tuesday>
+      <Wednesday>false</Wednesday>
+      <Thursday>false</Thursday>
+      <Friday>false</Friday>
+    </DaysNeeded>
+  </Mother>
+  <Mother>
+    <ID>003</ID>
+    <FirstName>Hermione</FirstName>
+    <LastName>Grainjer</LastName>
+    <Phone>0505050505</Phone>
+    <Address>Daniel, Bnei-Brak, Israel</Address>
+    <NeedNannyAddress></NeedNannyAddress>
+    <Comments>
+      <Comment>Leviosa</Comment>
+    </Comments>
+    <HoursNeeded>
+      <Sunday>
+        <Begin>2</Begin>
+        <End>6</End>
+      </Sunday>
+      <Monday>
+        <Begin>0</Begin>
+        <End>2</End>
+      </Monday>
+      <Tuesday>
+        <Begin>4</Begin>
+        <End>14</End>
+      </Tuesday>
+      <Wednesday>
+        <Begin>0</Begin>
+        <End>0</End>
+      </Wednesday>
+      <Thursday>
+        <Begin>0</Begin>
+        <End>0</End>
+      </Thursday>
+      <Friday>
+        <Begin>0</Begin>
+        <End>0</End>
+      </Friday>
+    </HoursNeeded>
+    <DaysNeeded>
+      <Sunday>true</Sunday>
+      <Monday>true</Monday>
+      <Tuesday>true</Tuesday>
       <Wednesday>false</Wednesday>
       <Thursday>false</Thursday>
       <Friday>false</Friday>

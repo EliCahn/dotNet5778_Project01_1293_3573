@@ -661,12 +661,12 @@ namespace DS
                     else
                         throw new Exception("wrong type for the 3rd parameter");
                     break;
-                //case Contract.Props.PerMonth:
-                //    if (newVal is int)
-                //        c.PerMonth = (int)newVal;
-                //    else
-                //        throw new Exception("wrong type for the 3rd parameter");
-                //    break;                
+                case Contract.Props.PerMonth:
+                    if (newVal is int)
+                        c.PerMonth = (int)newVal;
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
             }
 
         }
@@ -696,6 +696,11 @@ namespace DS
             AddChild(c2);
             AddContract(con1);
             AddContract(con2);
+        }
+
+        public void ClearListString(object target)
+        {
+            throw new NotImplementedException();
         }
     }
 }

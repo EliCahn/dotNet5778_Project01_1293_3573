@@ -378,7 +378,8 @@ namespace BL
                                                            where con.NannyID == c.NannyID && con.IsSigned && con.SerialNumber != c.SerialNumber
                                                            select con;
             if (ContractsWithSameNanny.Count() < FindNannyByID(c.NannyID).MaxChildren && FindChildByID(c.ChildID).BirthDate.AddMonths(3).CompareTo(DateTime.Today) < 0)
-                c.IsSigned = true;
+                //c.IsSigned = true;
+                UpdateContract(c, Contract.Props.IsSigned, true);
             else
                 throw new Exception("Contract can't be signed!");
         }
@@ -485,7 +486,11 @@ namespace BL
                 for (int i = 0; i < 6; i++)
                 {
                     if (m.DaysNeeded[i] && temp[0, i].CompareTo(temp[1, i]) >= 0)
+                    {
+                        m.DaysNeeded[i] = false;
+                        UpdateMother(m, Mother.Props.DaysNeeded, m.DaysNeeded);
                         throw new Exception("starting time must be before ending time");
+                    }
                     else if (!m.DaysNeeded[i]) // To make things simple: WorkDays is the "key" to WorkHours. That means that there will be no hours in a day in which the nanny doens't work
                     {
                         temp[0, i] = default(DateTime);
@@ -494,17 +499,17 @@ namespace BL
                 }
             }
             dal.UpdateMother(m, prop, newVal);
-            if (prop == Mother.Props.DaysNeeded)
-            {   // Since we decided the HoursNeeded is depended on DaysNeeded, after a succesful change to the key we need to change the hours too
-                DateTime[,] temp = (DateTime[,])(m.HoursNeeded.Clone());
-                for (int i = 0; i < 6; i++)
-                    if (!m.DaysNeeded[i])
-                    {
-                        temp[0, i] = default(DateTime);
-                        temp[1, i] = default(DateTime);
-                    }
-                UpdateMother(m, Mother.Props.HoursNeeded, temp);
-            }
+            //if (prop == Mother.Props.DaysNeeded)
+            //{   // Since we decided the HoursNeeded is depended on DaysNeeded, after a succesful change to the key we need to change the hours too
+            //    DateTime[,] temp = (DateTime[,])(m.HoursNeeded.Clone());
+            //    for (int i = 0; i < 6; i++)
+            //        if (!m.DaysNeeded[i])
+            //        {
+            //            temp[0, i] = default(DateTime);
+            //            temp[1, i] = default(DateTime);
+            //        }
+            //    UpdateMother(m, Mother.Props.HoursNeeded, temp);
+            //}
             IEnumerable<Contract> HerContracts = from Contract con in GetContracts() where FindChildByID(con.ChildID).MotherID == m.ID select con;
             foreach (Contract con in HerContracts)
                 CalculateSalary(con);
@@ -515,8 +520,9 @@ namespace BL
         /// <param name="m">the contract to update</param>
         /// <param name="prop">the property to update </param>
         /// <param name="newVal">the new value for the property</param>
+        /// <param name="TerminateLoop">if set on true, it will not use calculate salary in the end, used to prevent recurisve calls</param>
         /// <exception cref="System.Exception">thrown if the new value is not of a proper type for the property</exception>
-        public void UpdateContract(Contract c, Contract.Props prop, object newVal)
+        public void UpdateContract(Contract c, Contract.Props prop, object newVal, bool TerminateLoop = false)
         {
             Nanny NannyInContract;
             Child ChildInContract;
@@ -587,7 +593,7 @@ namespace BL
             //if (prop == Contract.Props.PerHour && (!(newVal is int) || (int)newVal <= 0))
             //    throw new Exception("salary must be a positive integer");
             dal.UpdateContract(c, prop, newVal);
-            if (prop != Contract.Props.IsMet && prop != Contract.Props.Beginning && prop != Contract.Props.End)
+            if (!TerminateLoop && prop != Contract.Props.IsMet && prop != Contract.Props.Beginning && prop != Contract.Props.End && prop != Contract.Props.IsSigned && prop != Contract.Props.PerMonth)
                 CalculateSalary(c);
 
             
@@ -678,9 +684,12 @@ namespace BL
             else
                 salary = NannyInContract.MonthSalary;
             salary *= rate;
-            c.PerMonth = (int)salary;
-            c.IsByHour = NannyInContract.IsCostByHour;
-            c.PerHour = NannyInContract.HourSalary;
+            UpdateContract(c, Contract.Props.PerMonth, (int)salary, true);
+            UpdateContract(c, Contract.Props.IsByHour, NannyInContract.IsCostByHour, true);
+            UpdateContract(c, Contract.Props.PerHour, NannyInContract.HourSalary, true);
+            //c.PerMonth = (int)salary;
+            //c.IsByHour = NannyInContract.IsCostByHour;
+            //c.PerHour = NannyInContract.HourSalary;
         }
         /// <summary>
         /// Initializes some variables into the data source
@@ -761,6 +770,12 @@ namespace BL
             //        return n;
             //return null;
             return ContractsByCondition(c => c.SerialNumber == serNum).First();
+        }
+
+        public void ClearListString(object target)
+        {
+            dal.ClearListString(target);
+            
         }
     }
 }

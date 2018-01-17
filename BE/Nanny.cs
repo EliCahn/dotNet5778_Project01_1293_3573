@@ -256,14 +256,16 @@ namespace BE
             }
             return retStr;
         }
-        public override bool Equals(object obj)
-        {
-            return (obj as Nanny).ID == ID;
-        }
+        //public override bool Equals(object obj)
+        //{
+        //    return (obj as Nanny).ID == ID;
+        //}
 
-        public override int GetHashCode()
-        {
-            return int.Parse(ID);
-        }
+        //public override int GetHashCode()
+        //{
+        //    if (ID == null || ID == "")
+        //        return base.GetHashCode();
+        //    return int.Parse(ID);
+        //}
     }
 }

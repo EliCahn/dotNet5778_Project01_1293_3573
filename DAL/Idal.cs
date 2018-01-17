@@ -128,6 +128,6 @@ namespace DAL
         /// Initializes some variables into the data source
         /// </summary>
         void InitSomeVars();
-        
+        void ClearListString(object target);
     }
 }

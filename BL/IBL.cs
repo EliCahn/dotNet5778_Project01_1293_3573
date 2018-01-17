@@ -83,12 +83,13 @@ namespace BL
         /// <param name="m">the contract to update</param>
         /// <param name="prop">the property to update </param>
         /// <param name="newVal">the new value for the property</param>
+        /// <param name="TerminateLoop">if set on true, it will not use calculate salary in the end, used to prevent recurisve calls</param>
         /// <exception cref="System.Exception">thrown if the new value is not of a proper type for the property</exception>
-        void UpdateContract(Contract c, Contract.Props prop, object newVal);
+        void UpdateContract(Contract c, Contract.Props prop, object newVal, bool TerminateLoop = false);
          /// <summary>
-        /// gets the list of nannies
-        /// </summary>
-        /// <returns></returns>
+         /// gets the list of nannies
+         /// </summary>
+         /// <returns></returns>
         List<Nanny> GetNannies();
         /// <summary>
         /// gets the list of mothers
@@ -234,5 +235,6 @@ namespace BL
         /// Initializes some variables into the xml data source if it is empty
         /// </summary>
         void InitSomeVars();
+        void ClearListString(object target);
     }
 }

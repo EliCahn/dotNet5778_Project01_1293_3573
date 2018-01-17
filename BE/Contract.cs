@@ -13,7 +13,7 @@ namespace BE
     {/// <summary>
      /// represents an editable property of the contract
      /// </summary>
-        public enum Props {  NannyID, ChildID, IsMet, /*IsSigned,*/ IsByHour, PerHour, Beginning, End}
+        public enum Props {  NannyID, ChildID, IsMet, IsSigned, IsByHour, PerHour, PerMonth, Beginning, End}
         string serNum, nannyId, childId; //note that if there wasn't a specifi requirement to have a field for the ID's, which implies a Nanny and Child type pointers are not wanted, I would have used pointers instead to save much trouble later...
         bool isMet, isSigned = false, isByHour;
         int perH, perM;
