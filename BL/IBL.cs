@@ -235,6 +235,10 @@ namespace BL
         /// Initializes some variables into the xml data source if it is empty
         /// </summary>
         void InitSomeVars();
+        /// <summary>
+        /// Clears the list of strings from the Nanny, Mother or Child in their XML file
+        /// </summary>
+        /// <param name="target">The object involving the list of strings to clear</param>
         void ClearListString(object target);
     }
 }

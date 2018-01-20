@@ -75,7 +75,7 @@ namespace UI
                 iDTextBox.Items.Add(m.ID);
                 iDTextBox.SelectedIndex = -1;
                 iDTextBox.Text = "";
-                if (MessageBox.Show("Nanny added succesfully, do you wish to stay on the Mother window?", "Success", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+                if (MessageBox.Show("Mother added succesfully, do you wish to stay on the Mother window?", "Success", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
                     Close();
                 //((MainWindow)Application.Current.MainWindow).NannyLST.Items.Add(MainWindow.bl.ToShortString(n));
                 //ListStringReader lsr = new ListStringReader(this, n.Recommendations);

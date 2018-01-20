@@ -2,28 +2,28 @@
 <Nannies>
   <Nanny>
     <ID>123</ID>
-    <FirstName>sara</FirstName>
-    <LastName>levi</LastName>
-    <Phone>052-000-00-01</Phone>
+    <FirstName>Sari</FirstName>
+    <LastName>Levi</LastName>
+    <Phone>058-000-00-01</Phone>
     <Address>Bialik, Ramat-Gan, Israel</Address>
     <Expertise>3</Expertise>
     <Floor>5</Floor>
     <HourSalary>20</HourSalary>
     <MonthSalary>2000</MonthSalary>
-    <MaxAge>20</MaxAge>
+    <MaxAge>209</MaxAge>
     <MinAge>4</MinAge>
     <MaxChildren>1</MaxChildren>
-    <Elevator>true</Elevator>
-    <IsCostByHour>true</IsCostByHour>
-    <VacationByMinisterOfEducation>true</VacationByMinisterOfEducation>
+    <Elevator>True</Elevator>
+    <IsCostByHour>True</IsCostByHour>
+    <VacationByMinisterOfEducation>True</VacationByMinisterOfEducation>
     <BirthDate>
       <Year>1990</Year>
       <Month>1</Month>
       <Day>1</Day>
     </BirthDate>
     <Recommendations>
-      <Reccomendation>very patient</Reccomendation>
-      <Reccomendation>especially good with the youngest ones</Reccomendation>
+      <Recommendation>especially good with the youngest ones</Recommendation>
+      <Recommendation>And one more comment</Recommendation>
     </Recommendations>
     <WorkDays>
       <Sunday>true</Sunday>
@@ -70,33 +70,33 @@
     <Floor>4</Floor>
     <HourSalary>40</HourSalary>
     <MonthSalary>3000</MonthSalary>
-    <MaxAge>12</MaxAge>
+    <MaxAge>121</MaxAge>
     <MinAge>1</MinAge>
     <MaxChildren>6</MaxChildren>
-    <Elevator>true</Elevator>
-    <IsCostByHour>false</IsCostByHour>
-    <VacationByMinisterOfEducation>true</VacationByMinisterOfEducation>
+    <Elevator>True</Elevator>
+    <IsCostByHour>True</IsCostByHour>
+    <VacationByMinisterOfEducation>False</VacationByMinisterOfEducation>
     <BirthDate>
       <Year>1990</Year>
       <Month>1</Month>
       <Day>1</Day>
     </BirthDate>
     <Recommendations>
-      <Reccomendation>very patient</Reccomendation>
-      <Reccomendation>especially good with the youngest ones</Reccomendation>
+      <Recommendation>very patient</Recommendation>
+      <Recommendation>especially good with the youngest ones</Recommendation>
     </Recommendations>
     <WorkDays>
-      <Sunday>false</Sunday>
+      <Sunday>true</Sunday>
       <Monday>true</Monday>
       <Tuesday>true</Tuesday>
       <Wednesday>true</Wednesday>
       <Thursday>true</Thursday>
-      <Friday>true</Friday>
+      <Friday>false</Friday>
     </WorkDays>
     <WorkHours>
       <Sunday>
-        <Begin>0</Begin>
-        <End>0</End>
+        <Begin>2</Begin>
+        <End>7</End>
       </Sunday>
       <Monday>
         <Begin>8</Begin>
@@ -115,8 +115,128 @@
         <End>16</End>
       </Thursday>
       <Friday>
-        <Begin>8</Begin>
-        <End>19</End>
+        <Begin>0</Begin>
+        <End>0</End>
+      </Friday>
+    </WorkHours>
+  </Nanny>
+  <Nanny>
+    <ID>124</ID>
+    <FirstName>Naomi</FirstName>
+    <LastName>Catz</LastName>
+    <Phone>0556789123</Phone>
+    <Address>Ben-Yehuda, Jerusalem, Israel</Address>
+    <Expertise>12</Expertise>
+    <Floor>0</Floor>
+    <HourSalary>35</HourSalary>
+    <MonthSalary>3000</MonthSalary>
+    <MaxAge>120</MaxAge>
+    <MinAge>1</MinAge>
+    <MaxChildren>5</MaxChildren>
+    <Elevator>True</Elevator>
+    <IsCostByHour>False</IsCostByHour>
+    <VacationByMinisterOfEducation>False</VacationByMinisterOfEducation>
+    <BirthDate>
+      <Year>1999</Year>
+      <Month>10</Month>
+      <Day>4</Day>
+    </BirthDate>
+    <Recommendations>
+      <Recommendation>Reccomended!!</Recommendation>
+    </Recommendations>
+    <WorkDays>
+      <Sunday>true</Sunday>
+      <Monday>true</Monday>
+      <Tuesday>false</Tuesday>
+      <Wednesday>true</Wednesday>
+      <Thursday>false</Thursday>
+      <Friday>false</Friday>
+    </WorkDays>
+    <WorkHours>
+      <Sunday>
+        <Begin>0</Begin>
+        <End>23</End>
+      </Sunday>
+      <Monday>
+        <Begin>0</Begin>
+        <End>23</End>
+      </Monday>
+      <Tuesday>
+        <Begin>0</Begin>
+        <End>0</End>
+      </Tuesday>
+      <Wednesday>
+        <Begin>0</Begin>
+        <End>23</End>
+      </Wednesday>
+      <Thursday>
+        <Begin>0</Begin>
+        <End>0</End>
+      </Thursday>
+      <Friday>
+        <Begin>0</Begin>
+        <End>0</End>
+      </Friday>
+    </WorkHours>
+  </Nanny>
+  <Nanny>
+    <ID>222</ID>
+    <FirstName>Nannie</FirstName>
+    <LastName>Shienderu</LastName>
+    <Phone>0580580580</Phone>
+    <Address>Gordon, Tel-Aviv, Israel</Address>
+    <Expertise>2</Expertise>
+    <Floor>-5</Floor>
+    <HourSalary>24</HourSalary>
+    <MonthSalary>4000</MonthSalary>
+    <MaxAge>60</MaxAge>
+    <MinAge>5</MinAge>
+    <MaxChildren>4</MaxChildren>
+    <Elevator>false</Elevator>
+    <IsCostByHour>false</IsCostByHour>
+    <VacationByMinisterOfEducation>false</VacationByMinisterOfEducation>
+    <BirthDate>
+      <Year>2000</Year>
+      <Month>1</Month>
+      <Day>19</Day>
+    </BirthDate>
+    <Recommendations>
+      <Reccomendation>ABC</Reccomendation>
+      <Reccomendation>DEF</Reccomendation>
+      <Reccomendation>G</Reccomendation>
+    </Recommendations>
+    <WorkDays>
+      <Sunday>true</Sunday>
+      <Monday>true</Monday>
+      <Tuesday>true</Tuesday>
+      <Wednesday>true</Wednesday>
+      <Thursday>false</Thursday>
+      <Friday>false</Friday>
+    </WorkDays>
+    <WorkHours>
+      <Sunday>
+        <Begin>4</Begin>
+        <End>11</End>
+      </Sunday>
+      <Monday>
+        <Begin>7</Begin>
+        <End>14</End>
+      </Monday>
+      <Tuesday>
+        <Begin>0</Begin>
+        <End>5</End>
+      </Tuesday>
+      <Wednesday>
+        <Begin>10</Begin>
+        <End>16</End>
+      </Wednesday>
+      <Thursday>
+        <Begin>0</Begin>
+        <End>0</End>
+      </Thursday>
+      <Friday>
+        <Begin>0</Begin>
+        <End>0</End>
       </Friday>
     </WorkHours>
   </Nanny>

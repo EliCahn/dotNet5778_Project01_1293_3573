@@ -11,13 +11,14 @@ namespace DAL
 {
     public class Dal_XML_imp : Idal
     {
-        static int SerialNum = 10000000; //needs to be removed
+        //static int SerialNum = 10000000; //needs to be removed
         static string Address = Directory.GetParent((Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory()).FullName)).FullName).FullName + "\\DAL\\Resources";
+        static XElement ConfigRoot;
         static XElement ChildrenRoot;
         static XElement MothersRoot;
         static XElement NanniesRoot;
         static XElement ContractsRoot;
-        protected enum TypeToLoad { Nanny, Mother, Child, Contract}
+        protected enum TypeToLoad { Nanny, Mother, Child, Contract, Config }
 
         static Dal_XML_imp instance = null;
         public static Dal_XML_imp Instance
@@ -34,7 +35,7 @@ namespace DAL
         {
             try
             {
-                switch(t)
+                switch (t)
                 {
                     case TypeToLoad.Child:
                         ChildrenRoot = XElement.Load(Address + "\\Children.xml");
@@ -48,15 +49,37 @@ namespace DAL
                     case TypeToLoad.Nanny:
                         NanniesRoot = XElement.Load(Address + "\\Nannies.xml");
                         break;
-                }    
+                    case TypeToLoad.Config:
+                        ConfigRoot = XElement.Load(Address + "\\config.xml");
+                        break;
+                }
             }
             catch (Exception)
             {
                 //throw new Exception("File upload failed");
-                ChildrenRoot = new XElement("Children");
-                ContractsRoot = new XElement("Contracts");
-                MothersRoot = new XElement("Mothers");
-                NanniesRoot = new XElement("Nannies");
+                switch (t)
+                {
+                    case TypeToLoad.Child:
+                        ChildrenRoot = new XElement("Children");
+                        break;
+                    case TypeToLoad.Contract:
+                        ContractsRoot = new XElement("Contracts");
+                        break;
+                    case TypeToLoad.Mother:
+                        MothersRoot = new XElement("Mothers");
+                        break;
+                    case TypeToLoad.Nanny:
+                        NanniesRoot = new XElement("Nannies");
+                        break;
+                    case TypeToLoad.Config:
+                        ConfigRoot = new XElement("config");
+                        break;
+                }
+                
+                
+                
+                
+                
             }
         }
         public void AddChild(Child c)
@@ -90,6 +113,7 @@ namespace DAL
         public void AddContract(Contract c)
         {
             LoadData(TypeToLoad.Contract);
+            LoadData(TypeToLoad.Config);
             Nanny NannyInContract = FindNannyByID(c.NannyID);
             Child ChildInContract = FindChildByID(c.ChildID);
             if (NannyInContract == null)
@@ -99,8 +123,10 @@ namespace DAL
             foreach (Contract con in GetContracts())
                 if (con.ChildID == c.ChildID && con.NannyID == c.NannyID)
                     throw new Exception("Contarct between this nanny and child already exists");
-            c.SerialNumber = (SerialNum++).ToString();            
-            XElement newContract = new XElement("Contract", 
+            //c.SerialNumber = (SerialNum++).ToString();
+            c.SerialNumber = ConfigRoot.Element("SerialNumber").Value;
+            ConfigRoot.Element("SerialNumber").Value = (int.Parse(c.SerialNumber) + 1).ToString();            
+            XElement newContract = new XElement("Contract",
                 new XElement("SerialNumber", c.SerialNumber),
                 new XElement("ChildID", c.ChildID),
                 new XElement("NannyID", c.NannyID),
@@ -113,6 +139,7 @@ namespace DAL
                 new XElement("End", new XElement("Year", c.End.Year), new XElement("Month", c.End.Month), new XElement("Day", c.End.Day)));
             ContractsRoot.Add(newContract);
             ContractsRoot.Save(Address + "\\Contracts.xml");
+            ConfigRoot.Save(Address + "\\config.xml");
         }
 
         public void AddMother(Mother m)
@@ -141,13 +168,13 @@ namespace DAL
             for (int i = 0; i < 6; i++)
             {
                 newMother.Element("DaysNeeded").Add(new XElement(((Days)i).ToString(), m.DaysNeeded[i]));
-                newMother.Element("HoursNeeded").Add(new XElement(((Days)i).ToString(), 
-                    new XElement("Begin", m.HoursNeeded[0, i].Hour), new XElement("End", m.HoursNeeded[1,i].Hour)));
+                newMother.Element("HoursNeeded").Add(new XElement(((Days)i).ToString(),
+                    new XElement("Begin", m.HoursNeeded[0, i].Hour), new XElement("End", m.HoursNeeded[1, i].Hour)));
             }
             LoadData(TypeToLoad.Mother);
             MothersRoot.Add(newMother);
             MothersRoot.Save(Address + "\\Mothers.xml");
-                    
+
         }
 
         public void AddNanny(Nanny n)
@@ -225,7 +252,7 @@ namespace DAL
             try
             {
                 retList = (from ch in ChildrenRoot.Elements() select new Child(ch.Element("ID").Value, ch.Element("MotherID").Value, ch.Element("FirstName").Value, ch.Element("LastName").Value, (from need in ch.Element("SpecialNeeds").Elements() select need.Value).ToList(), new DateTime(int.Parse(ch.Element("BirthDate").Element("Year").Value), int.Parse(ch.Element("BirthDate").Element("Month").Value), int.Parse(ch.Element("BirthDate").Element("Day").Value)))).ToList();
-                foreach(Child c in retList)
+                foreach (Child c in retList)
                 {
                     c.HaveSpecialNeeds = c.SpecialNeeds.Count != 0;
                 }
@@ -243,19 +270,21 @@ namespace DAL
             List<Contract> retList;
             try
             {
-                retList = (from con in ContractsRoot.Elements() select new Contract() {
-                    ChildID = con.Element("ChildID").Value,
-                    NannyID = con.Element("NannyID").Value,
-                    SerialNumber = con.Element("SerialNumber").Value,
-                    PerHour = int.Parse(con.Element("PerHour").Value),
-                    PerMonth = int.Parse(con.Element("PerMonth").Value),
-                    IsByHour = bool.Parse(con.Element("IsByHour").Value),
-                    IsMet = bool.Parse(con.Element("IsMet").Value),
-                    IsSigned = bool.Parse(con.Element("IsSigned").Value),
-                    Beginning = new DateTime(int.Parse(con.Element("Beginning").Element("Year").Value), int.Parse(con.Element("Beginning").Element("Month").Value), int.Parse(con.Element("Beginning").Element("Day").Value)),
-                    End = new DateTime(int.Parse(con.Element("End").Element("Year").Value), int.Parse(con.Element("End").Element("Month").Value), int.Parse(con.Element("End").Element("Day").Value)),
+                retList = (from con in ContractsRoot.Elements()
+                           select new Contract()
+                           {
+                               ChildID = con.Element("ChildID").Value,
+                               NannyID = con.Element("NannyID").Value,
+                               SerialNumber = con.Element("SerialNumber").Value,
+                               PerHour = int.Parse(con.Element("PerHour").Value),
+                               PerMonth = int.Parse(con.Element("PerMonth").Value),
+                               IsByHour = bool.Parse(con.Element("IsByHour").Value),
+                               IsMet = bool.Parse(con.Element("IsMet").Value),
+                               IsSigned = bool.Parse(con.Element("IsSigned").Value),
+                               Beginning = new DateTime(int.Parse(con.Element("Beginning").Element("Year").Value), int.Parse(con.Element("Beginning").Element("Month").Value), int.Parse(con.Element("Beginning").Element("Day").Value)),
+                               End = new DateTime(int.Parse(con.Element("End").Element("Year").Value), int.Parse(con.Element("End").Element("Month").Value), int.Parse(con.Element("End").Element("Day").Value)),
 
-                }).ToList();
+                           }).ToList();
             }
             catch
             {
@@ -280,7 +309,7 @@ namespace DAL
                                Phone = mom.Element("Phone").Value,
                                NeedNannyAddress = mom.Element("NeedNannyAddress").Value,
                                //Comments = (from com in mom.Element("Comments").Elements() select com.Value).ToList()
-                           }).ToList();               
+                           }).ToList();
                 foreach (XElement xmom in MothersRoot.Elements())
                 {
                     Mother mom = retList.Find(m => m.ID == xmom.Element("ID").Value);
@@ -289,16 +318,16 @@ namespace DAL
                     int i = 0;
                     foreach (XElement day in xmom.Element("DaysNeeded").Elements())
                     {
-                        
+
                         mom.DaysNeeded[i++] = bool.Parse(day.Value);
                     }
                     i = 0;
                     foreach (XElement hour in xmom.Element("HoursNeeded").Elements())
-                    {                        
+                    {
                         mom.HoursNeeded[0, i] = default(DateTime).AddHours(int.Parse(hour.Element("Begin").Value));
                         mom.HoursNeeded[1, i++] = default(DateTime).AddHours(int.Parse(hour.Element("End").Value));
-                    }                        
-                       
+                    }
+
                 }
             }
             catch
@@ -338,17 +367,17 @@ namespace DAL
                            }).ToList();
                 foreach (XElement xnan in NanniesRoot.Elements())
                 {
-                    Nanny nan = retList.Find(n => n.ID == xnan.Element("ID").Value);                    
+                    Nanny nan = retList.Find(n => n.ID == xnan.Element("ID").Value);
                     foreach (XElement rec in xnan.Element("Recommendations").Elements())
                         nan.Recommendations.Add(rec.Value);
                     int i = 0;
                     foreach (XElement day in xnan.Element("WorkDays").Elements())
-                    {                        
+                    {
                         nan.WorkDays[i++] = bool.Parse(day.Value);
                     }
                     i = 0;
                     foreach (XElement hour in xnan.Element("WorkHours").Elements())
-                    {                        
+                    {
                         nan.WorkHours[0, i] = default(DateTime).AddHours(int.Parse(hour.Element("Begin").Value));
                         nan.WorkHours[1, i++] = default(DateTime).AddHours(int.Parse(hour.Element("End").Value));
                     }
@@ -365,6 +394,9 @@ namespace DAL
         {
             if (GetNannies().Count > 0 || GetMothers().Count > 0 || GetChildren().Count > 0 || GetContracts().Count > 0)
                 return;
+            LoadData(TypeToLoad.Config);
+            ConfigRoot.Add(new XElement("SerialNumber", 10000000));
+            ConfigRoot.Save(Address + "\\config.xml");
             DateTime[,] hours1 = new DateTime[,] { { default(DateTime).AddHours(8), default(DateTime).AddHours(8), default(DateTime).AddHours(8), default(DateTime).AddHours(8), default(DateTime).AddHours(8), default(DateTime).AddHours(8) }, { default(DateTime).AddHours(15), default(DateTime).AddHours(15), default(DateTime).AddHours(19), default(DateTime).AddHours(19), default(DateTime).AddHours(19), default(DateTime).AddHours(19) } },
                 hours2 = new DateTime[,] { { default(DateTime).AddHours(15), default(DateTime).AddHours(8), default(DateTime).AddHours(9), default(DateTime).AddHours(10), default(DateTime).AddHours(8), default(DateTime).AddHours(8) }, { default(DateTime).AddHours(23), default(DateTime).AddHours(15), default(DateTime).AddHours(19), default(DateTime).AddHours(18), default(DateTime).AddHours(16), default(DateTime).AddHours(19) } };
             List<string> recs1 = new List<string>(), coms1 = new List<string>();
@@ -390,7 +422,7 @@ namespace DAL
 
         public void RemoveChild(Child c)
         {
-            string ContractNumber = "";            
+            string ContractNumber = "";
             IEnumerable<string> srNums = from Contract con in GetContracts()
                                          where con.ChildID == c.ID
                                          select con.SerialNumber;
@@ -488,8 +520,8 @@ namespace DAL
         {
             LoadData(TypeToLoad.Child);
             XElement ChildToUpdate = (from ch in ChildrenRoot.Elements()
-                              where ch.Element("ID").Value == c.ID
-                              select ch).FirstOrDefault();
+                                      where ch.Element("ID").Value == c.ID
+                                      select ch).FirstOrDefault();
             switch (prop)
             {
                 //case Child.Props.BirthDate:
@@ -567,8 +599,8 @@ namespace DAL
         {
             LoadData(TypeToLoad.Contract);
             XElement ContractToUpdate = (from ch in ContractsRoot.Elements()
-                                      where ch.Element("SerialNumber").Value == c.SerialNumber
-                                      select ch).FirstOrDefault();
+                                         where ch.Element("SerialNumber").Value == c.SerialNumber
+                                         select ch).FirstOrDefault();
             switch (prop)
             {
                 case Contract.Props.Beginning:
@@ -586,7 +618,7 @@ namespace DAL
                         {
                             if (ch.ID == (string)newVal)
                             {
-                                ContractToUpdate.Element("ChildID").Value  = (string)newVal;
+                                ContractToUpdate.Element("ChildID").Value = (string)newVal;
                                 break;
                             }
                             //else
@@ -606,7 +638,7 @@ namespace DAL
                     break;
                 case Contract.Props.IsByHour:
                     if (newVal is bool)
-                        ContractToUpdate.Element("IsByHour").Value  = newVal.ToString();
+                        ContractToUpdate.Element("IsByHour").Value = newVal.ToString();
                     else
                         throw new Exception("wrong type for the 3rd parameter");
                     break;
@@ -637,7 +669,7 @@ namespace DAL
                     break;
                 case Contract.Props.PerHour:
                     if (newVal is int)
-                        ContractToUpdate.Element("PerHour").Value  = newVal.ToString();
+                        ContractToUpdate.Element("PerHour").Value = newVal.ToString();
                     else
                         throw new Exception("wrong type for the 3rd parameter");
                     break;
@@ -700,7 +732,7 @@ namespace DAL
                         MotherToUpdate.Element("HoursNeeded").RemoveAll();
                         for (int i = 0; i < 6; i++)
                         {
-                            MotherToUpdate.Element("HoursNeeded").Add(new XElement(((Days)i).ToString(), new XElement("Begin", temp[0,i].Hour), new XElement("End", temp[1, i].Hour)));
+                            MotherToUpdate.Element("HoursNeeded").Add(new XElement(((Days)i).ToString(), new XElement("Begin", temp[0, i].Hour), new XElement("End", temp[1, i].Hour)));
                             //m.HoursNeeded[0, i] = temp[0, i];
                             //m.HoursNeeded[1, i] = temp[1, i];
                         }
@@ -750,12 +782,142 @@ namespace DAL
                 NannyToUpdate.Element("Recommendations").RemoveAll();
                 NanniesRoot.Save(Address + "\\Nannies.xml");
             }
+            else if (target is Child)
+            {
+                LoadData(TypeToLoad.Child);
+                XElement ChildToUpdate = (from ch in ChildrenRoot.Elements()
+                                          where ch.Element("ID").Value == (target as Child).ID
+                                          select ch).FirstOrDefault();
+                ChildToUpdate.Element("SpecialNeeds").RemoveAll();
+                ChildrenRoot.Save(Address + "\\Children.xml");
+            }
             else throw new Exception("Illegal parameter type!");
         }
 
         public void UpdateNanny(Nanny n, Nanny.Props prop, object newVal)
         {
-            throw new NotImplementedException();
+            LoadData(TypeToLoad.Nanny);
+            XElement NannyToUpdate = (from ch in NanniesRoot.Elements()
+                                      where ch.Element("ID").Value == n.ID
+                                      select ch).FirstOrDefault();
+            switch (prop)
+            {
+                case Nanny.Props.Address:
+                    if (newVal is string)
+                        NannyToUpdate.Element("Address").Value = (string)newVal;
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Nanny.Props.Elevator:
+                    if (newVal is bool)
+                        NannyToUpdate.Element("Elevator").Value = newVal.ToString();
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Nanny.Props.Expertise:
+                    if (newVal is int)
+                        NannyToUpdate.Element("Expertise").Value = newVal.ToString();
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Nanny.Props.FirstName:
+                    if (newVal is string)
+                        NannyToUpdate.Element("FirstName").Value = (string)newVal;
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Nanny.Props.Floor:
+                    if (newVal is int)
+                        NannyToUpdate.Element("Floor").Value = newVal.ToString();
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Nanny.Props.HourSalary:
+                    if (newVal is int)
+                        NannyToUpdate.Element("HourSalary").Value = newVal.ToString();
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Nanny.Props.IsCostByHour:
+                    if (newVal is bool)
+                        NannyToUpdate.Element("IsCostByHour").Value = newVal.ToString();
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Nanny.Props.LastName:
+                    if (newVal is string)
+                        NannyToUpdate.Element("LastName").Value = (string)newVal;
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Nanny.Props.MaxAge:
+                    if (newVal is int)
+                        NannyToUpdate.Element("MaxAge").Value = newVal.ToString();
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Nanny.Props.MaxChildren:
+                    if (newVal is int)
+                        NannyToUpdate.Element("MaxChildren").Value = newVal.ToString();
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Nanny.Props.MinAge:
+                    if (newVal is int)
+                        NannyToUpdate.Element("MinAge").Value = newVal.ToString();
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Nanny.Props.MonthSalary:
+                    if (newVal is int)
+                        NannyToUpdate.Element("MonthSalary").Value = newVal.ToString();
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Nanny.Props.Phone:
+                    if (newVal is string)
+                        NannyToUpdate.Element("Phone").Value = (string)newVal;
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Nanny.Props.Recommendations:
+                    if (newVal is string)
+                        NannyToUpdate.Element("Recommendations").Add(new XElement("Recommendation", (string)newVal));
+                    break;
+                case Nanny.Props.VacationByMinisterOfEducation:
+                    if (newVal is bool)
+                        NannyToUpdate.Element("VacationByMinisterOfEducation").Value = newVal.ToString();
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Nanny.Props.WorkDays:
+                    if (newVal is bool[] && ((bool[])newVal).Length == 7)
+                    {
+                        NannyToUpdate.Element("WorkDays").RemoveAll();
+                        for (int i = 0; i < 6; i++)
+                            //m.DaysNeeded[i] = ((bool[])newVal)[i];
+                            NannyToUpdate.Element("WorkDays").Add(new XElement(((Days)i).ToString(), ((bool[])newVal)[i]));
+                    }
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+                case Nanny.Props.WorkHours:
+                    DateTime[,] temp = newVal as DateTime[,];
+                    if (temp != null && temp.GetLength(0) == 2 && temp.GetLength(1) == 6)
+                    {
+                        NannyToUpdate.Element("WorkHours").RemoveAll();
+                        for (int i = 0; i < 6; i++)
+                        {
+                            NannyToUpdate.Element("WorkHours").Add(new XElement(((Days)i).ToString(), new XElement("Begin", temp[0, i].Hour), new XElement("End", temp[1, i].Hour)));
+                            //m.HoursNeeded[0, i] = temp[0, i];
+                            //m.HoursNeeded[1, i] = temp[1, i];
+                        }
+                    }
+                    else
+                        throw new Exception("wrong type for the 3rd parameter");
+                    break;
+            }
+            NanniesRoot.Save(Address + "\\Nannies.xml");
         }
     }
 }

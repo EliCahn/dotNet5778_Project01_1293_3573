@@ -64,6 +64,7 @@ namespace UI
                         return;
                     needs.Clear();
                 }
+                tempChild.SpecialNeeds.Clear();
                 if (tempChild.HaveSpecialNeeds)
                     foreach (string str in needs.GetListString())
                         tempChild.SpecialNeeds.Add(str);
@@ -183,6 +184,7 @@ namespace UI
                 MainWindow.bl.UpdateChild(target, Child.Props.FirstName, tempChild.FirstName);
                 MainWindow.bl.UpdateChild(target, Child.Props.LastName, tempChild.LastName);
                 MainWindow.bl.UpdateChild(target, Child.Props.HaveSpecialNeeds, tempChild.HaveSpecialNeeds);
+                MainWindow.bl.ClearListString(target);
                 if (tempChild.HaveSpecialNeeds)
                     foreach (string str in needs.GetListString())
                         MainWindow.bl.UpdateChild(target, Child.Props.SpecialNeeds, str);

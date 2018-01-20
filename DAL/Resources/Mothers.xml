@@ -24,7 +24,7 @@
       </Monday>
       <Tuesday>
         <Begin>0</Begin>
-        <End>0</End>
+        <End>23</End>
       </Tuesday>
       <Wednesday>
         <Begin>10</Begin>
@@ -42,7 +42,7 @@
     <DaysNeeded>
       <Sunday>true</Sunday>
       <Monday>true</Monday>
-      <Tuesday>false</Tuesday>
+      <Tuesday>true</Tuesday>
       <Wednesday>true</Wednesday>
       <Thursday>true</Thursday>
       <Friday>false</Friday>
@@ -54,7 +54,7 @@
     <LastName>Amidala</LastName>
     <Phone>0526987147</Phone>
     <Address>Ben-Yehuda, Jerusalem, Israel</Address>
-    <NeedNannyAddress></NeedNannyAddress>
+    <NeedNannyAddress>Rambam, Rehovot, Israel</NeedNannyAddress>
     <Comments>
       <Comment>Comment D</Comment>
     </Comments>
@@ -134,7 +134,7 @@
       <Monday>true</Monday>
       <Tuesday>true</Tuesday>
       <Wednesday>false</Wednesday>
-      <Thursday>false</Thursday>
+      <Thursday>true</Thursday>
       <Friday>false</Friday>
     </DaysNeeded>
   </Mother>

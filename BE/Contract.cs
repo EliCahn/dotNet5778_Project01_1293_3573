@@ -106,7 +106,7 @@ namespace BE
         /// </summary>
         public override string ToString()
         {
-            return "Contract Number: " + SerialNumber + "\nNanny's ID: " + NannyID + "\nChild's ID: " + ChildID + "\nSalary: " + (IsByHour ? PerHour + "/h => " + PerMonth + " per month" : PerMonth + " per month") + "\nDuration: " + Beginning.ToLongDateString() + " - " + End.ToLongDateString();
+            return "Contract Number: " + SerialNumber + "\nNanny's ID: " + NannyID + "\nChild's ID: " + ChildID + "\nSalary: " + (IsByHour ? PerHour + "/h => " + PerMonth + " per month" : PerMonth + " per month") + "\nDuration: " + Beginning.ToLongDateString() + " - " + End.ToLongDateString() + (isSigned? "\nSigned" : "");
         }
     }
 }

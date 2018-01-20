@@ -66,6 +66,7 @@ namespace UI
                     tempNanny.WorkHours[0, i] = hours[0, i];
                     tempNanny.WorkHours[1, i] = hours[1, i];
                 }
+                tempNanny.Recommendations.Clear();
                 foreach (string str in recs.GetListString())
                     tempNanny.Recommendations.Add(str);
                 Nanny n = new Nanny(tempNanny);  // This is to prevent the binding from further altering the Nanny
@@ -349,9 +350,11 @@ namespace UI
                     days[i] = (bool)h.Check[i].IsChecked;
                     target.WorkDays[i] = (bool)h.Check[i].IsChecked;
                 }
+                h.GetMatrix();
                 MainWindow.bl.UpdateNanny(target, Nanny.Props.WorkDays, days);
-                MainWindow.bl.UpdateNanny(target, Nanny.Props.WorkHours, h.GetMatrix());                
-                target.Recommendations.Clear();
+                MainWindow.bl.UpdateNanny(target, Nanny.Props.WorkHours, h.GetMatrix());
+                //target.Recommendations.Clear();
+                MainWindow.bl.ClearListString(target);
                 foreach (string str in recs.GetListString())
                     MainWindow.bl.UpdateNanny(target, Nanny.Props.Recommendations, str);
                 if (MessageBox.Show("Update was succesful, do you wish to stay on the Nanny window?", "Success", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)

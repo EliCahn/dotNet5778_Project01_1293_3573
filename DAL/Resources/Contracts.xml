@@ -5,7 +5,7 @@
     <ChildID>901</ChildID>
     <NannyID>123</NannyID>
     <PerHour>20</PerHour>
-    <PerMonth>2352</PerMonth>
+    <PerMonth>3214</PerMonth>
     <IsByHour>True</IsByHour>
     <IsMet>True</IsMet>
     <IsSigned>false</IsSigned>
@@ -25,7 +25,7 @@
     <ChildID>902</ChildID>
     <NannyID>123</NannyID>
     <PerHour>20</PerHour>
-    <PerMonth>2352</PerMonth>
+    <PerMonth>3214</PerMonth>
     <IsByHour>True</IsByHour>
     <IsMet>False</IsMet>
     <IsSigned>True</IsSigned>
@@ -38,6 +38,66 @@
       <Year>2018</Year>
       <Month>3</Month>
       <Day>30</Day>
+    </End>
+  </Contract>
+  <Contract>
+    <SerialNumber>10000002</SerialNumber>
+    <ChildID>555</ChildID>
+    <NannyID>1234</NannyID>
+    <PerHour>40</PerHour>
+    <PerMonth>1440</PerMonth>
+    <IsByHour>True</IsByHour>
+    <IsMet>true</IsMet>
+    <IsSigned>True</IsSigned>
+    <Beginning>
+      <Year>2018</Year>
+      <Month>1</Month>
+      <Day>19</Day>
+    </Beginning>
+    <End>
+      <Year>2018</Year>
+      <Month>1</Month>
+      <Day>21</Day>
+    </End>
+  </Contract>
+  <Contract>
+    <SerialNumber>10000003</SerialNumber>
+    <ChildID>902</ChildID>
+    <NannyID>1234</NannyID>
+    <PerHour>40</PerHour>
+    <PerMonth>6080</PerMonth>
+    <IsByHour>True</IsByHour>
+    <IsMet>True</IsMet>
+    <IsSigned>false</IsSigned>
+    <Beginning>
+      <Year>2018</Year>
+      <Month>1</Month>
+      <Day>19</Day>
+    </Beginning>
+    <End>
+      <Year>2018</Year>
+      <Month>1</Month>
+      <Day>21</Day>
+    </End>
+  </Contract>
+  <Contract>
+    <SerialNumber>10000004</SerialNumber>
+    <ChildID>333</ChildID>
+    <NannyID>1234</NannyID>
+    <PerHour>40</PerHour>
+    <PerMonth>2720</PerMonth>
+    <IsByHour>True</IsByHour>
+    <IsMet>false</IsMet>
+    <IsSigned>false</IsSigned>
+    <Beginning>
+      <Year>2018</Year>
+      <Month>1</Month>
+      <Day>19</Day>
+    </Beginning>
+    <End>
+      <Year>2018</Year>
+      <Month>1</Month>
+      <Day>21</Day>
     </End>
   </Contract>
 </Contracts>

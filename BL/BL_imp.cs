@@ -443,7 +443,11 @@ namespace BL
                 for (int i = 0; i < 6; i++)
                 {
                     if (n.WorkDays[i] && temp[0, i].CompareTo(temp[1, i]) >= 0)
-                        throw new Exception("starting time must be before ending time");
+                    {
+                        n.WorkDays[i] = false;
+                        UpdateNanny(n, Nanny.Props.WorkDays, n.WorkDays);
+                        throw new Exception("starting time must be before ending time");                        
+                    }
                     else if (!n.WorkDays[i]) // To make things simple: WorkDays is the "key" to WorkHours. That means that there will be no hours in a day in which the nanny doens't work
                     {
                         temp[0, i] = default(DateTime);
@@ -452,17 +456,17 @@ namespace BL
                 }
             }
             dal.UpdateNanny(n, prop, newVal);
-            if (prop == Nanny.Props.WorkDays)
-            {   // Since we decided the WorkHours is depended on WorkDays, after a succesful change to the key we need to change the hours too
-                DateTime[,] temp = (DateTime[,])(n.WorkHours.Clone());
-                for (int i = 0; i < 6; i++)
-                    if (!n.WorkDays[i])
-                    {
-                        temp[0, i] = default(DateTime);
-                        temp[1, i] = default(DateTime);
-                    }
-                UpdateNanny(n, Nanny.Props.WorkHours, temp);
-            }
+            //if (prop == Nanny.Props.WorkDays)
+            //{   // Since we decided the WorkHours is depended on WorkDays, after a succesful change to the key we need to change the hours too
+            //    DateTime[,] temp = (DateTime[,])(n.WorkHours.Clone());
+            //    for (int i = 0; i < 6; i++)
+            //        if (!n.WorkDays[i])
+            //        {
+            //            temp[0, i] = default(DateTime);
+            //            temp[1, i] = default(DateTime);
+            //        }
+            //    UpdateNanny(n, Nanny.Props.WorkHours, temp);
+            //}
             IEnumerable<Contract> HerContracts = from Contract con in GetContracts() where con.NannyID == n.ID select con;
             foreach (Contract con in HerContracts)
                 CalculateSalary(con);

@@ -235,12 +235,20 @@ namespace UI
                     case "Contracts grouped by the distance between the nanny and her location":
                         new Thread(() =>
                         {
-                            List<IGrouping<int, Contract>> ListToDisplay = bl.ContractsByDistance(true);
-                            Dispatcher.Invoke(() =>
+                            try
                             {
-                                groupedlistDisplay = new GroupedListDisplay((string)s, "Go to selected Contract's window", ListToDisplay);
-                                groupedlistDisplay.ShowDialog();
-                            });
+                                List<IGrouping<int, Contract>> ListToDisplay = bl.ContractsByDistance(true);
+                                Dispatcher.Invoke(() =>
+                                {
+                                    groupedlistDisplay = new GroupedListDisplay((string)s, "Go to selected Contract's window", ListToDisplay);
+                                    groupedlistDisplay.ShowDialog();
+                                });
+                            }
+                            catch (Exception)
+                            {
+                                MessageBox.Show("An error has occured when measuring the distances for the contracts, try again, and check your internet connection if the problem persists or ensure that the addresses are written flawlessly.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                
+                            }
                         }).Start();
                         break;
 
